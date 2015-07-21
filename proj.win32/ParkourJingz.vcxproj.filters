@@ -57,9 +57,6 @@
     <ClCompile Include="..\Classes\GameMainController.cpp">
       <Filter>src\GameController</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\PlayerInputController.cpp">
-      <Filter>src\GameController</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\ProcedureGenController.cpp">
       <Filter>src\GameController</Filter>
     </ClCompile>
@@ -70,6 +67,9 @@
       <Filter>src\Layers</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\MapSceneController.cpp">
+      <Filter>src\GameController</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\PlayerController.cpp">
       <Filter>src\GameController</Filter>
     </ClCompile>
   </ItemGroup>
@@ -107,9 +107,6 @@
     <ClInclude Include="..\Classes\ProcedureGenController.h">
       <Filter>src\GameController</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\PlayerInputController.h">
-      <Filter>src\GameController</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\MapSequences.h">
       <Filter>src\Maps</Filter>
     </ClInclude>
@@ -117,6 +114,9 @@
       <Filter>src\Layers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\MapSceneController.h">
+      <Filter>src\GameController</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PlayerController.h">
       <Filter>src\GameController</Filter>
     </ClInclude>
   </ItemGroup>

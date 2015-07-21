@@ -151,7 +151,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClCompile Include="..\Classes\Obstacle.cpp" />
     <ClCompile Include="..\Classes\ProcedureGenController.cpp" />
     <ClCompile Include="..\Classes\Player.cpp" />
-    <ClCompile Include="..\Classes\PlayerInputController.cpp" />
+    <ClCompile Include="..\Classes\PlayerController.cpp" />
     <ClCompile Include="..\Classes\RegitsteredEvents.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -168,7 +168,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClInclude Include="..\Classes\Obstacle.h" />
     <ClInclude Include="..\Classes\ProcedureGenController.h" />
     <ClInclude Include="..\Classes\Player.h" />
-    <ClInclude Include="..\Classes\PlayerInputController.h" />
+    <ClInclude Include="..\Classes\PlayerController.h" />
     <ClInclude Include="..\Classes\RegitsteredEvents.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
