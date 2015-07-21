@@ -34,7 +34,7 @@ bool MainScene::init()
 	cameraBackground2D->setDepth(-5);
 
 	//todo 操作相机的添加顺序或排列方式才行
-	auto cameraMainUI = Camera::createOrthographic(winSize.width, winSize.height, -1, 1000);
+	auto cameraMainUI = Camera::createOrthographic(winSize.width, winSize.height, 0, 100);
 	cameraMainUI->setCameraFlag(CameraFlag::USER4);
 	this->addChild(cameraMainUI);
 	cameraMainUI->setDepth(5);
