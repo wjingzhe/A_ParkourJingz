@@ -57,9 +57,6 @@
     <ClCompile Include="..\Classes\GameMainController.cpp">
       <Filter>src\GameController</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\ProcedureGenController.cpp">
-      <Filter>src\GameController</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\MapSequences.cpp">
       <Filter>src\Maps</Filter>
     </ClCompile>
@@ -70,6 +67,9 @@
       <Filter>src\GameController</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\PlayerController.cpp">
+      <Filter>src\GameController</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\NpcController.cpp">
       <Filter>src\GameController</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,9 +104,6 @@
     <ClInclude Include="..\Classes\GameMainController.h">
       <Filter>src\GameController</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\ProcedureGenController.h">
-      <Filter>src\GameController</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\MapSequences.h">
       <Filter>src\Maps</Filter>
     </ClInclude>
@@ -118,6 +115,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\PlayerController.h">
       <Filter>src\GameController</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NpcController.h">
+      <Filter>src\GameController</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MoveableElems.h">
+      <Filter>src\Actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
