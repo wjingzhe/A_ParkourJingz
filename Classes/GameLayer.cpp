@@ -41,10 +41,6 @@ bool GameLayer::init()
 
 	_pPlayer->getCurPlayerSprite()->setPosition3D(Vec3(0, 0, -30));//这个位置可能需要换在其他地方去设定
 
-
-	_pPgController.insertMapSequence(new MapSequences());//违反原则，但是先使用，迟点调整模块结构
-
-
 	CC_SAFE_RELEASE(_pGameMainController);
 	_pGameMainController = GameMainController::create(_pPlayer, this);
 	CC_SAFE_RETAIN(_pGameMainController);

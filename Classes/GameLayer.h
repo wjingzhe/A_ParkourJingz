@@ -1,6 +1,5 @@
 #pragma once
 #include "cocos2d.h"
-#include "ProcedureGenController.h"
 
 class GameMainController;
 class Player;
@@ -29,8 +28,5 @@ public:
 private:
 	cocos2d::EventListenerTouchOneByOne * _pTouchListenerOneByOne;
 	Player * _pPlayer;
-	
-	ProcedureGenController _pPgController;
-
 	GameMainController * _pGameMainController;
 };
