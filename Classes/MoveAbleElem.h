@@ -2,12 +2,12 @@
 
 #include "cocos2d.h"
 
-class MoveableElems :public cocos2d::Ref
+class MoveAbleElem :public cocos2d::Ref
 {
 	
 
 public:
-	~MoveableElems()
+	~MoveAbleElem()
 	{
 		CC_SAFE_RELEASE_NULL(_pSprite);
 	}
@@ -37,7 +37,7 @@ public:
 	}
 
 protected:
-	MoveableElems() :_pSprite(nullptr), _vMoveDir(0, 0, 1), _fMoveSpeed(1.0f)
+	MoveAbleElem() :_pSprite(nullptr), _vMoveDir(0, 0, 1), _fMoveSpeed(1.0f)
 	{
 		_pSprite = cocos2d::Sprite3D::create();
 		CC_SAFE_RETAIN(_pSprite);

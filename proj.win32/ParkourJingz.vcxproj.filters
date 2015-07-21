@@ -119,7 +119,7 @@
     <ClInclude Include="..\Classes\NpcController.h">
       <Filter>src\GameController</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\MoveableElems.h">
+    <ClInclude Include="..\Classes\MoveAbleElem.h">
       <Filter>src\Actors</Filter>
     </ClInclude>
   </ItemGroup>

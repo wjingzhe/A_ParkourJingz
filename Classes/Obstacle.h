@@ -1,10 +1,10 @@
 #pragma once
 #include "cocos2d.h"
-#include "MoveableElems.h"
+#include "MoveAbleElem.h"
 
 
 
-class Obstacle :public MoveableElems
+class Obstacle :public MoveAbleElem
 {
 #define DEFAULT_MODEL_RES_PATH  "model/piglet.c3b"
 #define DEFAULT_TEXTURE_RES_PATH  "model/zhu0928.jpg"

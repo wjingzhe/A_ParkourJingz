@@ -165,7 +165,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClInclude Include="..\Classes\MainMenuLayer.h" />
     <ClInclude Include="..\Classes\MapSceneController.h" />
     <ClInclude Include="..\Classes\MapSequences.h" />
-    <ClInclude Include="..\Classes\MoveableElems.h" />
+    <ClInclude Include="..\Classes\MoveAbleElem.h" />
     <ClInclude Include="..\Classes\Obstacle.h" />
     <ClInclude Include="..\Classes\NpcController.h" />
     <ClInclude Include="..\Classes\Player.h" />

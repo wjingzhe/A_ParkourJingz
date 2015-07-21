@@ -1,11 +1,11 @@
 #pragma once
 
 #include "cocos2d.h"
-#include "MoveableElems.h"
+#include "MoveAbleElem.h"
 
 
 
-class Coin :public MoveableElems
+class Coin :public MoveAbleElem
 {
 #define DEFAULT_MODEL_RES_PATH  "model/coin.c3b"
 protected:

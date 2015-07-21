@@ -6,7 +6,7 @@
 class MapSequences;
 struct SequenceInfo;
 class Player;
-class MoveableElems;
+class MoveAbleElem;
 
 class NpcController:public cocos2d::Ref
 {
@@ -53,7 +53,7 @@ private:
 	MapSequences * _pCurMapSequences;
 	std::vector<MapSequences *> _vSequencesPtr;
 
-	cocos2d::Vector<MoveableElems *> vpMoveableElems;
+	cocos2d::Vector<MoveAbleElem *> vpMoveableElems;
 
 	Player * _pPlayer;
 	cocos2d::Layer * _pGameLayer;
