@@ -42,8 +42,8 @@ bool MainScene::init()
 
 	auto camera3D = Camera::createPerspective(35, GLfloat(winSize.width) / GLfloat(winSize.height), 1, 1000);
 	camera3D->setCameraFlag(CameraFlag::DEFAULT);
-	camera3D->setPosition3D(Vec3(0, 15, 15));
-	camera3D->lookAt(Vec3(0, 15, -60), Vec3(0, 1, 0));
+	camera3D->setPosition3D(Vec3(0, 15, 10));
+	camera3D->lookAt(Vec3(0, 5, -60), Vec3(0, 1, 0));
 	this->addChild(camera3D);
 
 
