@@ -1,4 +1,4 @@
-#include "PlayerInputController.h"
+#include "PlayerController.h"
 #include "Player.h"
 
 USING_NS_CC;
@@ -8,20 +8,23 @@ USING_NS_CC;
 
 #define MIDDLE_LINE_POS_X 0
 
-PlayerInputController::PlayerInputController(Player * player) :_pPlayer(nullptr)
+PlayerController::PlayerController(Player * player) 
+	:_pPlayer(nullptr)
+	, _fStepLength(10.0f), _fElapsed(0.0f), _fPerTime(1/60.0f)
+	, _bMovePlayerMode(true)
 {
 	this->_pPlayer = player;
 	CC_SAFE_RETAIN(this->_pPlayer);
 }
 
-PlayerInputController::~PlayerInputController()
+PlayerController::~PlayerController()
 {
 	CC_SAFE_RELEASE_NULL(this->_pPlayer);
 }
 
-PlayerInputController * PlayerInputController::create(Player * player)
+PlayerController * PlayerController::create(Player * player)
 {
-	PlayerInputController *pRet = new(std::nothrow) PlayerInputController(player);
+	PlayerController *pRet = new(std::nothrow) PlayerController(player);
 	if (pRet && pRet->init())
 	{
 		pRet->autorelease();
@@ -36,12 +39,19 @@ PlayerInputController * PlayerInputController::create(Player * player)
 
 }
 
-void PlayerInputController::reveiveTouchBegin(Vec2 pos, Node * pRenderNode)
+
+bool PlayerController::init()
+{
+	Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
+	return true; 
+}
+
+void PlayerController::reveiveTouchBegin(Vec2 pos, Node * pRenderNode)
 {
 	this->_touchBeginPos = std::move(pos);
 }
 
-void PlayerInputController::reveiveTouchEnd(Vec2 pos, Node * pRenderNode)
+void PlayerController::reveiveTouchEnd(Vec2 pos, Node * pRenderNode)
 {
 	this->_touchEndPos = std::move(pos);
 
@@ -119,4 +129,43 @@ void PlayerInputController::reveiveTouchEnd(Vec2 pos, Node * pRenderNode)
 			MOVE_FORWARD(5);
 		}
 	}
+}
+
+
+void PlayerController::beganMovePlayer(void)
+{
+	_bMovePlayerMode = true;
+}
+
+void PlayerController::stopMovePlayer(void)
+{
+	_bMovePlayerMode = false;
+}
+
+void PlayerController::update(float delta)
+{
+	if (_bMovePlayerMode)
+	{
+		_fElapsed += delta;
+		if (_fElapsed >= _fPerTime)
+		{
+			auto moveStep = Vec3(0.0f, 0.0f, -_fStepLength);
+			_pPlayer->getCurPlayerSprite()->setPosition3D(_pPlayer->getCurPlayerSprite()->getPosition3D() + moveStep);
+
+			auto temp = _pPlayer->getCurPlayerSprite()->getCameraMask();
+
+			for each (auto pCamera in _pPlayer->getCurPlayerSprite()->getScene()->getCameras())
+			{
+				if ((static_cast<unsigned short>(pCamera->getCameraFlag()) & temp) != 0)
+				{
+					pCamera->setPosition3D(pCamera->getPosition3D() + moveStep);
+				}
+			}
+			
+
+			_fElapsed = 0.0f;
+
+		}
+	}
+	
 }

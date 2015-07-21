@@ -4,26 +4,38 @@
 //todo 没必要依赖于某个Player，可以使多个，这样子才能允许多人同屏的可能性，每次调用传入Player对象即可
 class Player;
 
-class PlayerInputController:public cocos2d::Ref
+class PlayerController:public cocos2d::Ref
 {
-	PlayerInputController(Player * pPlayer);
+	PlayerController(Player * pPlayer);
 public:
-	~PlayerInputController();
+	~PlayerController();
 
-	bool init() {return true;}
+	static PlayerController * create(Player * pPlayer);
+	
+	bool init();
 
 	void reveiveTouchBegin(cocos2d::Vec2 pos, cocos2d::Node * pRenderNode);
 
 	void reveiveTouchEnd(cocos2d::Vec2 pos, cocos2d::Node * pRenderNode);
 
-	static PlayerInputController * create(Player * pPlayer);
+	void beganMovePlayer(void);
+
+	void stopMovePlayer(void);
+
+	void update(float delta);
+
 private:
-	CC_DISALLOW_COPY_AND_ASSIGN(PlayerInputController);
+	CC_DISALLOW_COPY_AND_ASSIGN(PlayerController);
 
 private:
 	Player * _pPlayer;
 	cocos2d::Vec2 _touchBeginPos;
 	cocos2d::Vec2 _touchEndPos;
+
+	float _fStepLength;
+	float _fElapsed;
+	float _fPerTime;
+	bool _bMovePlayerMode;
 };
 
 
