@@ -10,7 +10,7 @@ USING_NS_CC;
 
 PlayerController::PlayerController(Player * player) 
 	:_pPlayer(nullptr)
-	, _fStepLength(10.0f), _fElapsed(0.0f), _fPerTime(1/60.0f)
+	, _fStepLength(1.0f), _fElapsed(0.0f), _fPerTime(1/60.0f)
 	, _bMovePlayerMode(true)
 {
 	this->_pPlayer = player;
@@ -76,7 +76,7 @@ void PlayerController::reveiveTouchEnd(Vec2 pos, Node * pRenderNode)
 				&& !_pPlayer->getCurPlayerSprite()->getActionByTag(TURN_RIGHT)
 				)
 			{
-				auto action = MoveBy::create(0.2f, Vec3(10, 0, 0));
+				auto action = MoveBy::create(0.2f, Vec3(10.0f, 0, 0));
 				action->setTag(TURN_RIGHT);
 				this->_pPlayer->getCurPlayerSprite()->runAction(action);
 			}
@@ -89,7 +89,7 @@ void PlayerController::reveiveTouchEnd(Vec2 pos, Node * pRenderNode)
 				&& !_pPlayer->getCurPlayerSprite()->getActionByTag(TURN_RIGHT)
 				)
 			{
-				auto action = MoveBy::create(0.2f, Vec3(-10, 0, 0));
+				auto action = MoveBy::create(0.2f, Vec3(-10.0f, 0, 0));
 				action->setTag(TURN_LEFT);
 				this->_pPlayer->getCurPlayerSprite()->runAction(action);
 			}
