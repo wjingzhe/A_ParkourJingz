@@ -64,3 +64,32 @@ void GameMainController::onAfterDraw(cocos2d::EventCustom * pEvent)
 {
 
 }
+
+void GameMainController::setMoveMode(MOVE_MODE mode)
+{
+	_eMode = mode;
+
+	switch (_eMode)
+	{
+	case GameMainController::SCENE:
+		_pPlayerController->stopMovePlayer();
+		_pMapSceneController->beganMoveScene();
+		break;
+
+	case GameMainController::PLAYER:
+		_pMapSceneController->stopMoveScene();
+		_pPlayerController->beganMovePlayer();
+		break;
+
+	case GameMainController::BOTH_SCENE_AND_PLAYER:
+		_pMapSceneController->beganMoveScene();
+		_pPlayerController->beganMovePlayer();
+		break;
+	case GameMainController::NONE:
+		_pPlayerController->stopMovePlayer();
+		_pMapSceneController->stopMoveScene();
+		break;
+	default:
+		break;
+	}
+}

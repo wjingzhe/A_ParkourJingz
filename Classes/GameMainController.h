@@ -45,13 +45,12 @@ public:
 	enum MOVE_MODE
 	{
 		SCENE = 0,
-		PLAYER = 1
+		PLAYER = 1,
+		BOTH_SCENE_AND_PLAYER,
+		NONE
 	};
 
-	void setMoveMode(MOVE_MODE mode)
-	{
-		_eMode = mode;
-	}
+	void setMoveMode(MOVE_MODE mode);
 
 private:
 	MapSceneController * _pMapSceneController;
