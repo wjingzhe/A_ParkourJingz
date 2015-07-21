@@ -1,27 +1,41 @@
 #pragma once
 
 #include "cocos2d.h"
+#include "MoveableElems.h"
 
-class Coin
+#define DEFAULT_MODEL_RES_PATH  "model/coin.c3b"
+
+class Coin :public MoveableElems
 {
 protected:
-	
-
-public:
-	//CREATE_FUNC_WITH_ARGS(Coin, "model/coin.c3b");
 	Coin();
-	~Coin();
+public:
+	virtual ~Coin();
 
-	bool init(const std::string &pathName = "model/coin.c3b");
+	bool init(const std::string &pathName = DEFAULT_MODEL_RES_PATH);
 
-	cocos2d::Sprite3D * getCurSprite()
+	cocos2d::Sprite3D * getCurSprite() override
 	{
 		return _pSprite;
 	}
 
-private:
+	static Coin* create(const std::string &szModelPath = DEFAULT_MODEL_RES_PATH)
+	{
+		Coin *pRet = new(std::nothrow) Coin();
+		if (pRet && pRet->init(szModelPath))
+		{
+			pRet->autorelease();
+			return pRet;
+		}
+		else
+		{
+			delete pRet;
+			pRet = NULL;
+			return NULL;
+		}
+	}
 
-	cocos2d::Sprite3D * _pSprite;
+private:
 
 };
 

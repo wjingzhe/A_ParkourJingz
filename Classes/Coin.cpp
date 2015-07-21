@@ -2,7 +2,7 @@
 
 USING_NS_CC;
 
-Coin::Coin() :_pSprite(nullptr)
+Coin::Coin()
 {
 
 }

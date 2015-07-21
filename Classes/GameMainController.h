@@ -11,6 +11,7 @@
 class Player;
 class MapSceneController;
 class PlayerController;
+class NpcController;
 
 class GameMainController:public cocos2d::Ref
 {
@@ -55,6 +56,9 @@ public:
 private:
 	MapSceneController * _pMapSceneController;
 	PlayerController * _pPlayerController;
+	NpcController * _pNpcController;
+
+
 	cocos2d::Layer * _pGameLayer;
 	cocos2d::EventListenerCustom * _pEventListenerAfterDraw;
 	MOVE_MODE _eMode;

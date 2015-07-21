@@ -2,7 +2,7 @@
 
 USING_NS_CC;
 
-Obstacle::Obstacle() :_pSprite(nullptr)
+Obstacle::Obstacle()
 {
 
 }
