@@ -21,7 +21,7 @@ bool Obstacle::init(const std::string &szModelPath, const std::string &szTexture
 	_pSprite->setTexture(szTexturePath);
 	_pSprite->setLocalZOrder(100);//£¿£¿ //todo 
 	//_pSprite->setRotation3D(Vec3(-90, 0, 90));
-	_pSprite->setScale(0.1);
+	_pSprite->setScale(0.1f);
 
 	return true;
 }

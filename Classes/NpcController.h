@@ -46,7 +46,8 @@ public:
 
 protected:
 	SequenceInfo pumpSequence();
-
+	//todo
+	float calcuratePosWillHit();
 
 private:
 	MapSequences * _pCurMapSequences;

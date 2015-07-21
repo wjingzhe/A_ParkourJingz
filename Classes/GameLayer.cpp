@@ -34,12 +34,12 @@ bool GameLayer::init()
 		return false;
 	}
 
-	this->_pPlayer = Player::getInstance();
+	this->_pPlayer = Player::create();
 	CC_SAFE_RETAIN(_pPlayer);
 
-	this->addChild(_pPlayer->getCurPlayerSprite(), 20);//todo 有什么用？
+	this->addChild(_pPlayer->getCurSprite(), 20);//todo 有什么用？
 
-	_pPlayer->getCurPlayerSprite()->setPosition3D(Vec3(0, 0, -30));//这个位置可能需要换在其他地方去设定
+	_pPlayer->getCurSprite()->setPosition3D(Vec3(0, 0, -30));//这个位置可能需要换在其他地方去设定
 
 	CC_SAFE_RELEASE(_pGameMainController);
 	_pGameMainController = GameMainController::create(_pPlayer, this);

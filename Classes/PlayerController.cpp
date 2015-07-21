@@ -15,6 +15,8 @@ PlayerController::PlayerController(Player * player)
 {
 	this->_pPlayer = player;
 	CC_SAFE_RETAIN(this->_pPlayer);
+
+	_fStepLength = _pPlayer->getMoveSpeed();
 }
 
 PlayerController::~PlayerController()
@@ -71,27 +73,27 @@ void PlayerController::reveiveTouchEnd(Vec2 pos, Node * pRenderNode)
 		if (result > 0) // right
 		{
 			//可以移动 且 不是正执行左右移动操作 Gets an action from the running action list by its tag.
-			if (_pPlayer->getCurPlayerSprite()->getPositionX() <= MIDDLE_LINE_POS_X
-				&& !_pPlayer->getCurPlayerSprite()->getActionByTag(TURN_LEFT)
-				&& !_pPlayer->getCurPlayerSprite()->getActionByTag(TURN_RIGHT)
+			if (_pPlayer->getCurSprite()->getPositionX() <= MIDDLE_LINE_POS_X
+				&& !_pPlayer->getCurSprite()->getActionByTag(TURN_LEFT)
+				&& !_pPlayer->getCurSprite()->getActionByTag(TURN_RIGHT)
 				)
 			{
 				auto action = MoveBy::create(0.2f, Vec3(10.0f, 0, 0));
 				action->setTag(TURN_RIGHT);
-				this->_pPlayer->getCurPlayerSprite()->runAction(action);
+				this->_pPlayer->getCurSprite()->runAction(action);
 			}
 		}
 		else //left
 		{
 			//可以移动 且 不是正执行左右移动操作 Gets an action from the running action list by its tag.
-			if (_pPlayer->getCurPlayerSprite()->getPositionX() >= MIDDLE_LINE_POS_X
-				&& !_pPlayer->getCurPlayerSprite()->getActionByTag(TURN_LEFT)
-				&& !_pPlayer->getCurPlayerSprite()->getActionByTag(TURN_RIGHT)
+			if (_pPlayer->getCurSprite()->getPositionX() >= MIDDLE_LINE_POS_X
+				&& !_pPlayer->getCurSprite()->getActionByTag(TURN_LEFT)
+				&& !_pPlayer->getCurSprite()->getActionByTag(TURN_RIGHT)
 				)
 			{
 				auto action = MoveBy::create(0.2f, Vec3(-10.0f, 0, 0));
 				action->setTag(TURN_LEFT);
-				this->_pPlayer->getCurPlayerSprite()->runAction(action);
+				this->_pPlayer->getCurSprite()->runAction(action);
 			}
 		}
 	}
@@ -99,7 +101,7 @@ void PlayerController::reveiveTouchEnd(Vec2 pos, Node * pRenderNode)
 	{
 
 #define MOVE_FORWARD(POS_X) \
-		auto cameraMask = _pPlayer->getCurPlayerSprite()->getCameraMask();\
+		auto cameraMask = _pPlayer->getCurSprite()->getCameraMask();\
 		\
 		std::vector<Camera*> cameras = pRenderNode->getScene()->getCameras();\
 		\
@@ -117,7 +119,7 @@ void PlayerController::reveiveTouchEnd(Vec2 pos, Node * pRenderNode)
 			(*it)->setPosition3D(temp);\
 			std::find_if(++it, cameras.end(), func);\
 		}\
-		_pPlayer->getCurPlayerSprite()->setPositionZ(_pPlayer->getCurPlayerSprite()->getPositionZ()+POS_X);
+		_pPlayer->getCurSprite()->setPositionZ(_pPlayer->getCurSprite()->getPositionZ()+POS_X);
 
 
 		if (diff.y > 0)
@@ -150,11 +152,11 @@ void PlayerController::update(float delta)
 		if (_fElapsed >= _fPerTime)
 		{
 			auto moveStep = Vec3(0.0f, 0.0f, -_fStepLength);
-			_pPlayer->getCurPlayerSprite()->setPosition3D(_pPlayer->getCurPlayerSprite()->getPosition3D() + moveStep);
+			_pPlayer->getCurSprite()->setPosition3D(_pPlayer->getCurSprite()->getPosition3D() + moveStep);
 
-			auto temp = _pPlayer->getCurPlayerSprite()->getCameraMask();
+			auto temp = _pPlayer->getCurSprite()->getCameraMask();
 
-			for each (auto pCamera in _pPlayer->getCurPlayerSprite()->getScene()->getCameras())
+			for each (auto pCamera in _pPlayer->getCurSprite()->getScene()->getCameras())
 			{
 				if ((static_cast<unsigned short>(pCamera->getCameraFlag()) & temp) != 0)
 				{

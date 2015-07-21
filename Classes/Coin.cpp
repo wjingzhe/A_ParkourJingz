@@ -21,6 +21,9 @@ bool Coin::init(const std::string &pathName)
 	this->_pSprite->setScale(0.3f);
 
 	CC_SAFE_RETAIN(_pSprite);
+
+	this->setMoveSpeed(0.0f);
+
 	return true;
 }
 

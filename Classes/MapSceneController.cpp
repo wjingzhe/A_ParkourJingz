@@ -96,7 +96,7 @@ void MapSceneController::linkRoads(void)
 	for each (auto pSprite in _vpRoadSprites)
 	{
 		auto pos = pSprite->getAABB().getCenter();
-		pos.set(pos.x, pos.y, pPlayer->getCurPlayerSprite()->getPositionZ());
+		pos.set(pos.x, pos.y, pPlayer->getCurSprite()->getPositionZ());
 		if (pSprite->getAABB().containPoint(pos))
 		{
 			index = _vpRoadSprites.getIndex(pSprite);

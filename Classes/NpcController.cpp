@@ -104,7 +104,7 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 			auto temp = Obstacle::create();\
 			vpMoveableElems.pushBack(temp);\
 			pRenderNode->addChild(temp->getCurSprite());\
-			temp->getCurSprite()->setPosition3D(Vec3(POS_X, -5, -250+pPlayer->getCurPlayerSprite()->getPositionZ()));\
+			temp->getCurSprite()->setPosition3D(Vec3(POS_X, -5, -250+pPlayer->getCurSprite()->getPositionZ()));\
 		}\
 		break;\
 	   \
@@ -113,7 +113,7 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 			auto temp = Coin::create(); \
 			vpMoveableElems.pushBack(temp);\
 			pRenderNode->addChild(temp->getCurSprite()); \
-			temp->getCurSprite()->setPosition3D(Vec3(POS_X, 0, -250+pPlayer->getCurPlayerSprite()->getPositionZ())); \
+			temp->getCurSprite()->setPosition3D(Vec3(POS_X, 0, -250+pPlayer->getCurSprite()->getPositionZ())); \
 			temp->getCurSprite()->setRotation3D(Vec3(90.0f, 0.0f, 180.0f));\
 		}\
 		break;\
