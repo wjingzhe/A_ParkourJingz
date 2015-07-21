@@ -9,8 +9,9 @@ USING_NS_CC;
 //资源来自网上，所以拼接的有问题，但不影响代码逻辑
 
 MapSceneController::MapSceneController() 
-	:_pGameLayer(nullptr), _pPlayer(nullptr)
-	, _pEventListenerAfterUpdate(nullptr), _fStepLength(1.0f), _fElapsed(0.0f), _fPerTime(1/60.0f)
+	:_pGameLayer(nullptr), _pPlayer(nullptr), _pEventListenerAfterUpdate(nullptr)
+	, _fStepLength(1.0f), _fElapsed(0.0f), _fPerTime(1/60.0f)
+	, _bMoveSceneMode(false)
 {
 	
 }
@@ -59,7 +60,7 @@ bool MapSceneController::init(Player * pPlayer, cocos2d::Layer * pGameLayer)
 
 	_fStepLength = 5;
 
-	Director::getInstance()->getScheduler()->scheduleUpdate(this,0,false);
+	Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
 
 	return true;
 }
@@ -70,7 +71,7 @@ void MapSceneController::preGenerate(void){
 	for (int i = 0; i < 4; ++i)
 	{
 		auto pRoadSprite = Sprite3D::create("model/scene.c3b");
-		pRoadSprite->setScale(0.2);
+		pRoadSprite->setScale(0.2f);
 		pRoadSprite->setRotation3D(Vec3(0, 90, 0));
 		pRoadSprite->setPosition3D(Vec3(0, -5, -(ROAD_SPRITE_MODEL_WIDTH * i)));
 		_pGameLayer->addChild(pRoadSprite, -100);
@@ -121,11 +122,14 @@ void MapSceneController::linkRoads(void)
 
 void MapSceneController::update(float delta)
 {
-	_fElapsed += delta;
-	if (_fElapsed >= _fPerTime)
+	if (_bMoveSceneMode)
 	{
-		moveScene(Vec3(0, 0, _fStepLength));
-		_fElapsed = 0.0f;
+		_fElapsed += delta;
+		if (_fElapsed >= _fPerTime)
+		{
+			moveScene(Vec3(0, 0, _fStepLength));
+			_fElapsed = 0.0f;
+		}
 	}
 	
 }
@@ -138,5 +142,15 @@ void MapSceneController::moveScene(const Vec3 &pos)
 		pSprite->setPosition3D(pSprite->getPosition3D() + pos);
 	}
 	
+}
+
+void MapSceneController::beganMoveScene(void)
+{
+	_bMoveSceneMode = true;
+}
+
+void MapSceneController::stopMoveScene(void)
+{
+	_bMoveSceneMode = false;
 }
 

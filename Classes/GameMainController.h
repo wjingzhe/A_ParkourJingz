@@ -10,7 +10,7 @@
 
 class Player;
 class MapSceneController;
-class PlayerInputController;
+class PlayerController;
 
 class GameMainController:public cocos2d::Ref
 {
@@ -42,9 +42,21 @@ public:
 
 	void onAfterDraw(cocos2d::EventCustom * pEvent);
 
+	enum MOVE_MODE
+	{
+		SCENE = 0,
+		PLAYER = 1
+	};
+
+	void setMoveMode(MOVE_MODE mode)
+	{
+		_eMode = mode;
+	}
+
 private:
 	MapSceneController * _pMapSceneController;
-	PlayerInputController * _pInputController;
+	PlayerController * _pPlayerController;
 	cocos2d::Layer * _pGameLayer;
 	cocos2d::EventListenerCustom * _pEventListenerAfterDraw;
+	MOVE_MODE _eMode;
 };

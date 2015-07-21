@@ -1,18 +1,19 @@
 #include "GameMainController.h"
 #include "Player.h"
 #include "MapSceneController.h"
-#include "PlayerInputController.h"
+#include "PlayerController.h"
 
 USING_NS_CC;
 
 GameMainController::GameMainController() 
-	:_pMapSceneController(nullptr), _pInputController(nullptr), _pGameLayer(nullptr), _pEventListenerAfterDraw(nullptr)
+	:_pMapSceneController(nullptr), _pPlayerController(nullptr), _pGameLayer(nullptr), _pEventListenerAfterDraw(nullptr)
+	, _eMode(MOVE_MODE::PLAYER)
 {
 }
 
 GameMainController::~GameMainController()
 {
-	CC_SAFE_RELEASE_NULL(_pInputController);
+	CC_SAFE_RELEASE_NULL(_pPlayerController);
 	CC_SAFE_RELEASE_NULL(_pMapSceneController);
 	Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerAfterDraw);
 	CC_SAFE_RELEASE_NULL(_pEventListenerAfterDraw);
@@ -24,9 +25,9 @@ bool GameMainController::init(Player * pPlayer,Layer * pGameLayer)
 	_pMapSceneController = MapSceneController::create(pPlayer, pGameLayer);
 	CC_SAFE_RETAIN(_pMapSceneController);
 
-	CC_SAFE_RELEASE(_pInputController);
-	_pInputController = PlayerInputController::create(pPlayer);
-	CC_SAFE_RETAIN(_pInputController);
+	CC_SAFE_RELEASE(_pPlayerController);
+	_pPlayerController = PlayerController::create(pPlayer);
+	CC_SAFE_RETAIN(_pPlayerController);
 
 	CC_SAFE_RETAIN(pGameLayer);
 	CC_SAFE_RELEASE(_pGameLayer);
@@ -50,13 +51,13 @@ bool GameMainController::init(Player * pPlayer,Layer * pGameLayer)
 
 bool GameMainController::onTouchBegan(Touch *touch, Event *unused_event)
 {
-	_pInputController->reveiveTouchBegin(touch->getLocation(), _pGameLayer);
+	_pPlayerController->reveiveTouchBegin(touch->getLocation(), _pGameLayer);
 	return true;
 }
 
 void GameMainController::onTouchEnded(Touch *touch, Event *unused_event)
 {
-	_pInputController->reveiveTouchEnd(touch->getLocation(), _pGameLayer);
+	_pPlayerController->reveiveTouchEnd(touch->getLocation(), _pGameLayer);
 }
 
 void GameMainController::onAfterDraw(cocos2d::EventCustom * pEvent)

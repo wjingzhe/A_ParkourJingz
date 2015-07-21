@@ -39,6 +39,11 @@ public:
 	//渲染之后移动场景
 	void moveScene(const cocos2d::Vec3 &pos);
 
+	void beganMoveScene(void);
+
+	void stopMoveScene(void);
+
+
 private:
 	Player * _pPlayer;
 	cocos2d::Layer * _pGameLayer;
@@ -49,5 +54,6 @@ private:
 	float _fStepLength;
 	float _fElapsed;
 	float _fPerTime;
+	bool _bMoveSceneMode;
 };
 
