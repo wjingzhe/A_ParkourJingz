@@ -66,9 +66,9 @@ bool MapSceneController::init(Player * pPlayer, cocos2d::Layer * pGameLayer)
 }
 
 void MapSceneController::preGenerate(void){
-	//为什么是4，实际上我乱来的，没想好 这里刚好遇到一个问题，double转化为float导致截断问题
+	//为什么是5，没想好 这里刚好遇到一个问题，double转化为float导致截断问题
 	//todo 
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 5; ++i)
 	{
 		auto pRoadSprite = Sprite3D::create("model/scene.c3b");
 		pRoadSprite->setScale(0.2f);
