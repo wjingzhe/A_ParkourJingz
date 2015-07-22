@@ -23,5 +23,13 @@ bool Obstacle::init(const std::string &szModelPath, const std::string &szTexture
 	//_pSprite->setRotation3D(Vec3(-90, 0, 90));
 	_pSprite->setScale(0.1f);
 
+	this->setMoveSpeed(1.0f*60.0f);
+
 	return true;
+}
+
+void Obstacle::update(float dt)
+{
+	auto moveStep = this->getMoveSpeed() * dt * this->getMoveDirNormal();
+	_pSprite->setPosition3D(_pSprite->getPosition3D() + moveStep);
 }
