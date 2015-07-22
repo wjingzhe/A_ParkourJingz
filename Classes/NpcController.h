@@ -46,8 +46,9 @@ public:
 
 protected:
 	SequenceInfo pumpSequence();
-	//todo
-	float calcuratePosWillHit();
+
+	//
+	cocos2d::Vec3 && calcuratePosWillHit(MoveAbleElem * pElemSrc, Player * pElemTar, float fDtToHit,const cocos2d::Vec3 & vOffset = cocos2d::Vec3(0.0f,0.f,0.f));
 
 private:
 	MapSequences * _pCurMapSequences;
@@ -57,4 +58,6 @@ private:
 
 	Player * _pPlayer;
 	cocos2d::Layer * _pGameLayer;
+
+	float _fRecationDt;
 };

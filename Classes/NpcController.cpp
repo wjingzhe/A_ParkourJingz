@@ -13,7 +13,7 @@ USING_NS_CC;
 #define TRACK_1 1
 #define TRACK_2 2
 
-NpcController::NpcController() :_pCurMapSequences(nullptr), _pPlayer(nullptr), _pGameLayer(nullptr)
+NpcController::NpcController() :_pCurMapSequences(nullptr), _pPlayer(nullptr), _pGameLayer(nullptr), _fRecationDt(1.0f)
 {
 	//用时间函数初始化随机种子
 	srand(static_cast<unsigned int>(clock()));
@@ -64,7 +64,7 @@ void NpcController::randomGenElement(Player * pPlayer, cocos2d::Node * pRenderNo
 
 	fObstacleStepTime += dt;
 
-	//每隔0.5秒生成一次障碍物
+	//每隔0.5秒生成一次障碍物,每次生成5行
 	if (fObstacleStepTime > 0.5)
 	{
 		generateObstacle(pPlayer, pRenderNode, dt);
@@ -95,16 +95,25 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 #define POS_RIGHT 10
 
 #define GEN_ELEMENTS(NUM,POS_X) switch(NUM) \
-		{\
+					{\
 	case EMPTY:\
 		break;\
 		\
 	case MONSTER:\
-			{\
+						{\
 			auto temp = Obstacle::create();\
 			vpMoveableElems.pushBack(temp);\
 			pRenderNode->addChild(temp->getCurSprite());\
-			temp->getCurSprite()->setPosition3D(Vec3(POS_X, -5, -250+pPlayer->getCurSprite()->getPositionZ()));\
+			auto diffDir = this->calcuratePosWillHit(temp, pPlayer, _fRecationDt * 5);\
+			if(false) \
+			{ \
+				temp->getCurSprite()->setPosition3D(pPlayer->getCurSprite()->getPosition3D() + diffDir );\
+			} \
+			else \
+			{\
+				temp->getCurSprite()->setPosition3D( \
+					 Vec3(POS_X, pPlayer->getCurSprite()->getPositionY() + diffDir.y, pPlayer->getCurSprite()->getPositionZ() + diffDir.z)); \
+			}\
 		}\
 		break;\
 	   \
@@ -113,7 +122,9 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 			auto temp = Coin::create(); \
 			vpMoveableElems.pushBack(temp);\
 			pRenderNode->addChild(temp->getCurSprite()); \
-			temp->getCurSprite()->setPosition3D(Vec3(POS_X, 0, -250+pPlayer->getCurSprite()->getPositionZ())); \
+			auto diffDir = this->calcuratePosWillHit(temp, pPlayer, _fRecationDt * 4,Vec3(0,0,-270));\
+			temp->getCurSprite()->setPosition3D( \
+					 Vec3(POS_X, pPlayer->getCurSprite()->getPositionY() + diffDir.y, pPlayer->getCurSprite()->getPositionZ() + diffDir.z));  \
 			temp->getCurSprite()->setRotation3D(Vec3(90.0f, 0.0f, 180.0f));\
 		}\
 		break;\
@@ -124,3 +135,31 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 	GEN_ELEMENTS(seq.right, POS_RIGHT);
 }
 
+cocos2d::Vec3 && NpcController::calcuratePosWillHit(MoveAbleElem * pElemSrc, Player * pElemTar, float fDtToHit, const Vec3 & vOffset)
+{
+	CC_SAFE_RETAIN(pElemSrc);
+	CC_SAFE_RETAIN(pElemTar);
+
+
+	auto pSpriteSrc =  pElemSrc->getCurSprite();
+	auto pSpriteTar = pElemTar->getCurSprite();
+
+	auto srcNormalDir = pElemSrc->getMoveDirNormal();
+	srcNormalDir.normalize();
+	
+	auto tarNormalDir = pElemTar->getMoveDirNormal();
+	tarNormalDir.normalize();
+
+	srcNormalDir = srcNormalDir * pElemSrc->getMoveSpeed();
+	tarNormalDir = tarNormalDir * pElemTar->getMoveSpeed();
+	auto tartDir = tarNormalDir - srcNormalDir;
+	tartDir *= fDtToHit;
+
+	tartDir += vOffset;
+	//pSpriteSrc->setPosition3D(pSpriteTar->getPosition3D() + tartDir + Vec3(0,-5,0));
+
+	return std::move(tartDir);
+
+	CC_SAFE_RELEASE(pElemSrc);
+	CC_SAFE_RELEASE(pElemTar);
+}
