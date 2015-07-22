@@ -26,7 +26,7 @@ public:
 		_fMoveSpeed = fSpeed;
 	}
 
-	cocos2d::Vec3 getMoveDir(void)
+	cocos2d::Vec3 getMoveDirNormal(void)
 	{
 		return _vMoveDir;
 	}
@@ -34,13 +34,20 @@ public:
 	void setMoveDir(cocos2d::Vec3 dir)
 	{
 		_vMoveDir = dir;
+		_vMoveDir.normalize();
+	}
+
+	virtual void update(float dt)
+	{
+
 	}
 
 protected:
-	MoveAbleElem() :_pSprite(nullptr), _vMoveDir(0, 0, 1), _fMoveSpeed(1.0f)
+	MoveAbleElem() :_pSprite(nullptr), _vMoveDir(0, 0, 1), _fMoveSpeed(1.0f*60.0f)
 	{
 		_pSprite = cocos2d::Sprite3D::create();
 		CC_SAFE_RETAIN(_pSprite);
+		cocos2d::Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
 	}
 
 	cocos2d::Sprite3D * _pSprite;
