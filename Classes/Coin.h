@@ -31,6 +31,8 @@ public:
 		}
 	}
 
+	virtual void update(float dt) override;
+
 private:
 
 };

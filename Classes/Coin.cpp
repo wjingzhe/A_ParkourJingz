@@ -27,3 +27,7 @@ bool Coin::init(const std::string &pathName)
 	return true;
 }
 
+void Coin::update(float dt)
+{
+
+}
