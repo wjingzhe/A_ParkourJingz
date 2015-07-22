@@ -4,7 +4,7 @@ USING_NS_CC;
 
 Player::Player()
 {
-	_vMoveDir = Vec3(0, 0, -1.0f), _fMoveSpeed = 1.0f;
+	_vMoveDir = Vec3(0, 0, -1.0f), _fMoveSpeed = 1.0f*60.0f;
 }
 
 Player::~Player()
