@@ -16,7 +16,7 @@ PlayerController::PlayerController(Player * player)
 	this->_pPlayer = player;
 	CC_SAFE_RETAIN(this->_pPlayer);
 
-	_fStepLength = _pPlayer->getMoveSpeed();
+	_fStepLength = _pPlayer->getMoveSpeed()*_fPerTime;
 }
 
 PlayerController::~PlayerController()
@@ -148,26 +148,19 @@ void PlayerController::update(float delta)
 {
 	if (_bMovePlayerMode)
 	{
-		_fElapsed += delta;
-		if (_fElapsed >= _fPerTime)
+		auto moveStep = _pPlayer->getMoveDirNormal() * _pPlayer->getMoveSpeed() * delta;
+		_pPlayer->getCurSprite()->setPosition3D(_pPlayer->getCurSprite()->getPosition3D() + moveStep);
+
+		auto temp = _pPlayer->getCurSprite()->getCameraMask();
+
+		for each (auto pCamera in _pPlayer->getCurSprite()->getScene()->getCameras())
 		{
-			auto moveStep = Vec3(0.0f, 0.0f, -_fStepLength);
-			_pPlayer->getCurSprite()->setPosition3D(_pPlayer->getCurSprite()->getPosition3D() + moveStep);
-
-			auto temp = _pPlayer->getCurSprite()->getCameraMask();
-
-			for each (auto pCamera in _pPlayer->getCurSprite()->getScene()->getCameras())
+			if ((static_cast<unsigned short>(pCamera->getCameraFlag()) & temp) != 0)
 			{
-				if ((static_cast<unsigned short>(pCamera->getCameraFlag()) & temp) != 0)
-				{
-					pCamera->setPosition3D(pCamera->getPosition3D() + moveStep);
-				}
+				pCamera->setPosition3D(pCamera->getPosition3D() + moveStep);
 			}
-			
-
-			_fElapsed = 0.0f;
-
 		}
+
 	}
 	
 }
