@@ -6,12 +6,30 @@
 
 class Player :public MoveAbleElem
 {
+#define DEFAULT_MODEL_RES_PATH "model/zhanshi_pao.c3b"
 	Player();
 public:
 	~Player();
-	bool init(const std::string &pathName = "model/zhanshi_pao.c3b");
+	bool init(const std::string &pathName = DEFAULT_MODEL_RES_PATH);
 
-	CREATE_FUNC(Player);
+	static int registerSelf(void);
+
+	static Player* create(const std::string &szModelPath = DEFAULT_MODEL_RES_PATH)
+	{
+		Player *pRet = new(std::nothrow) Player();
+		if (pRet && pRet->init(szModelPath))
+		{
+			pRet->autorelease();
+			return pRet;
+		}
+		else
+		{
+			delete pRet;
+			pRet = NULL;
+			return NULL;
+		}
+	}
+
 	
 private:
 };

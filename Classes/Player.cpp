@@ -1,10 +1,12 @@
 #include "Player.h"
+#include "MoveAbleElemManager.h"
 
 USING_NS_CC;
 
 Player::Player()
 {
 	_vMoveDir = Vec3(0, 0, -1.0f), _fMoveSpeed = 1.0f*60.0f;
+	_iElemTypeId = 4;
 }
 
 Player::~Player()
@@ -28,5 +30,14 @@ bool Player::init(const std::string &pathName)
 	auto animation = Animation3D::create(pathName);
 	auto animate = Animate3D::create(animation);
 	_pSprite->runAction(RepeatForever::create(animate));
+
 	return true;
 }
+
+int Player::registerSelf(void)
+{
+	MoveAbleElemManager::getInstance()->registerElemAndFactory(4, MoveAbleElemFactory<Player>::create);
+	return 0;
+}
+
+static int  a = Player::registerSelf();
