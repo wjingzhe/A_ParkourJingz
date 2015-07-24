@@ -3,12 +3,10 @@
 #include "cocos2d.h"
 #include "MoveAbleElem.h"
 
-class MoveAbleElemManager;
 
 class Coin :public MoveAbleElem
 {
 #define DEFAULT_MODEL_RES_PATH  "model/coin.c3b"
-	friend MoveAbleElemManager;
 protected:
 	Coin();
 public:
