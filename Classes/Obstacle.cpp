@@ -1,10 +1,12 @@
 #include "Obstacle.h"
+#include "MoveAbleElemManager.h"
 
 USING_NS_CC;
 
 Obstacle::Obstacle()
 {
-
+	_iElemTypeId = 1;
+	registerSelf();
 }
 
 Obstacle::~Obstacle()
@@ -14,6 +16,7 @@ Obstacle::~Obstacle()
 
 bool Obstacle::init(const std::string &szModelPath, const std::string &szTexturePath)
 {
+
 	CC_SAFE_RELEASE_NULL(_pSprite);
 	_pSprite = Sprite3D::create(szModelPath);
 	CC_SAFE_RETAIN(_pSprite);
@@ -33,3 +36,10 @@ void Obstacle::update(float dt)
 	auto moveStep = this->getMoveSpeed() * dt * this->getMoveDirNormal();
 	_pSprite->setPosition3D(_pSprite->getPosition3D() + moveStep);
 }
+int Obstacle::registerSelf(void)
+{
+	MoveAbleElemManager::getInstance()->registerElemAndFactory(1, MoveAbleElemFactory<Obstacle>::create);
+	return 0;
+}
+
+static int  a = Obstacle::registerSelf();

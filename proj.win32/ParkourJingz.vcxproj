@@ -148,6 +148,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClCompile Include="..\Classes\MainMenuLayer.cpp" />
     <ClCompile Include="..\Classes\MapSceneController.cpp" />
     <ClCompile Include="..\Classes\MapSequences.cpp" />
+    <ClCompile Include="..\Classes\MoveAbleElem.cpp" />
+    <ClCompile Include="..\Classes\MoveAbleElemManager.cpp" />
     <ClCompile Include="..\Classes\Obstacle.cpp" />
     <ClCompile Include="..\Classes\NpcController.cpp" />
     <ClCompile Include="..\Classes\Player.cpp" />
@@ -166,6 +168,9 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClInclude Include="..\Classes\MapSceneController.h" />
     <ClInclude Include="..\Classes\MapSequences.h" />
     <ClInclude Include="..\Classes\MoveAbleElem.h" />
+    <ClInclude Include="..\Classes\MoveAbleElemBaseFactory.h" />
+    <ClInclude Include="..\Classes\MoveAbleElemFactory.h" />
+    <ClInclude Include="..\Classes\MoveAbleElemManager.h" />
     <ClInclude Include="..\Classes\Obstacle.h" />
     <ClInclude Include="..\Classes\NpcController.h" />
     <ClInclude Include="..\Classes\Player.h" />

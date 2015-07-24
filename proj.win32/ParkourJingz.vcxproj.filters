@@ -72,6 +72,12 @@
     <ClCompile Include="..\Classes\NpcController.cpp">
       <Filter>src\GameController</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\MoveAbleElemManager.cpp">
+      <Filter>src\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MoveAbleElem.cpp">
+      <Filter>src\Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -120,6 +126,15 @@
       <Filter>src\GameController</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\MoveAbleElem.h">
+      <Filter>src\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MoveAbleElemManager.h">
+      <Filter>src\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MoveAbleElemFactory.h">
+      <Filter>src\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MoveAbleElemBaseFactory.h">
       <Filter>src\Actors</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,10 +1,12 @@
 #include "Coin.h"
+#include "MoveAbleElemManager.h"
 
 USING_NS_CC;
 
 Coin::Coin()
 {
-
+	_iElemTypeId = 2;
+	registerSelf();
 }
 
 Coin::~Coin()
@@ -31,3 +33,11 @@ void Coin::update(float dt)
 {
 
 }
+
+int Coin::registerSelf(void)
+{
+	MoveAbleElemManager::getInstance()->registerElemAndFactory(2, MoveAbleElemFactory<Coin>::create);
+	return 0;
+}
+
+static int  a = Coin::registerSelf();

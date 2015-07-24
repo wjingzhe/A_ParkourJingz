@@ -34,6 +34,7 @@ public:
 
 	virtual void update(float dt) override;
 
-private:
+	static int registerSelf(void);
 
+private:
 };
