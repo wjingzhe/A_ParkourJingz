@@ -148,7 +148,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClCompile Include="..\Classes\MainMenuLayer.cpp" />
     <ClCompile Include="..\Classes\MapSceneController.cpp" />
     <ClCompile Include="..\Classes\MapSequences.cpp" />
-    <ClCompile Include="..\Classes\MoveAbleElem.cpp" />
     <ClCompile Include="..\Classes\MoveAbleElemManager.cpp" />
     <ClCompile Include="..\Classes\Obstacle.cpp" />
     <ClCompile Include="..\Classes\NpcController.cpp" />

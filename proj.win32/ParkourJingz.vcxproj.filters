@@ -75,9 +75,6 @@
     <ClCompile Include="..\Classes\MoveAbleElemManager.cpp">
       <Filter>src\Actors</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\MoveAbleElem.cpp">
-      <Filter>src\Actors</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
