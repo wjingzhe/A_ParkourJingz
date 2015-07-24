@@ -5,6 +5,8 @@
 #include "Coin.h"
 #include "MapSequences.h"
 #include "Player.h"
+#include "MoveAbleElemManager.h"
+
 
 USING_NS_CC;
 
@@ -39,6 +41,7 @@ NpcController::~NpcController()
 //先使用，迟点调整模块结构
 bool NpcController::init(Player * pPlayer, cocos2d::Layer * pGameLayer)
 {
+
 	CC_SAFE_RETAIN(pPlayer);
 	CC_SAFE_RETAIN(pGameLayer);
 
@@ -49,7 +52,9 @@ bool NpcController::init(Player * pPlayer, cocos2d::Layer * pGameLayer)
 	_pGameLayer = pGameLayer;
 
 	this->insertMapSequence(new MapSequences());
+
 	Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
+
 	return true;
 }
 
@@ -101,7 +106,7 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 		\
 	case MONSTER:\
 						{\
-			auto temp = Obstacle::create();\
+			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(NUM);\
 			vpMoveableElems.pushBack(temp);\
 			pRenderNode->addChild(temp->getCurSprite());\
 			auto diffDir = this->calcuratePosWillHit(temp, pPlayer, _fRecationDt * 5);\
@@ -119,7 +124,7 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 	   \
 	case COIN:\
 		{\
-			auto temp = Coin::create(); \
+			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(NUM); \
 			vpMoveableElems.pushBack(temp);\
 			pRenderNode->addChild(temp->getCurSprite()); \
 			auto diffDir = this->calcuratePosWillHit(temp, pPlayer, _fRecationDt * 4,Vec3(0,0,-270));\
