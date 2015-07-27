@@ -7,7 +7,6 @@ USING_NS_CC;
 Obstacle::Obstacle()
 {
 	_iElemTypeId = 1;
-	registerSelf();
 }
 
 Obstacle::~Obstacle()
@@ -38,10 +37,3 @@ void Obstacle::update(float dt)
 	auto moveStep = this->getMoveSpeed() * dt * this->getMoveDirNormal();
 	_pSprite->setPosition3D(_pSprite->getPosition3D() + moveStep);
 }
-int Obstacle::registerSelf(void)
-{
-	MoveAbleElemManager::getInstance()->registerElemAndFactory(1, MoveAbleElemFactory<Obstacle>::create);
-	return 0;
-}
-
-static int  a = Obstacle::registerSelf();//注册，同时完成预生成
