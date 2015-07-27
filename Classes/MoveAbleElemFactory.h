@@ -9,7 +9,8 @@
 
 static std::atomic_flag s_lock = ATOMIC_FLAG_INIT;
 
-#define INCREASEMENT 10
+#define INCREASEMENT 5
+#define PRE_CREATE_INCREASEMENT 30
 
 #define ADD_MOVEABLE_ELEM(SIZE) \
 		for (size_t i = 0; i < SIZE; ++i)\
@@ -36,7 +37,7 @@ protected:
 			{
 				//³¢ÊÔÈ¡Ëø
 			}
-			ADD_MOVEABLE_ELEM(INCREASEMENT * 2);
+			ADD_MOVEABLE_ELEM(PRE_CREATE_INCREASEMENT);
 			_lock.clear();
 			//½âËø
 		}
