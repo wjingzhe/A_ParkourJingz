@@ -31,6 +31,8 @@ bool Player::init(const std::string &pathName)
 	auto animate = Animate3D::create(animation);
 	_pSprite->runAction(RepeatForever::create(animate));
 
+	_bIsSpriteInit = true;
+
 	return true;
 }
 
@@ -40,4 +42,4 @@ int Player::registerSelf(void)
 	return 0;
 }
 
-static int  a = Player::registerSelf();
+//static int a = Player::registerSelf();//注册，同时完成预生成

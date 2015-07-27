@@ -4,7 +4,7 @@
 
 //速度应该作为玩家、金币、怪物的属性，摄像机只做跟随操作
 
-class Player :public MoveAbleElem
+class Player :public MoveAbleElem,public cocos2d::Ref
 {
 #define DEFAULT_MODEL_RES_PATH "model/zhanshi_pao.c3b"
 	Player();
