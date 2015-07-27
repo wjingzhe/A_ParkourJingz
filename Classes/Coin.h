@@ -14,12 +14,11 @@ public:
 
 	bool init(const std::string &pathName = DEFAULT_MODEL_RES_PATH);
 
-	static Coin* create(const std::string &szModelPath = DEFAULT_MODEL_RES_PATH)
+	static Coin* create()
 	{
 		Coin *pRet = new(std::nothrow) Coin();
-		if (pRet && pRet->init(szModelPath))
+		if (pRet)
 		{
-			pRet->autorelease();
 			return pRet;
 		}
 		else
@@ -30,8 +29,12 @@ public:
 		}
 	}
 
-	virtual void update(float dt) override;
+	virtual void initSprite()
+	{
+		init();
+	}
 
+	virtual void update(float dt) override;
 
 	static int registerSelf(void);
 

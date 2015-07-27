@@ -6,7 +6,6 @@ USING_NS_CC;
 Coin::Coin()
 {
 	_iElemTypeId = 2;
-	registerSelf();
 }
 
 Coin::~Coin()
@@ -25,7 +24,7 @@ bool Coin::init(const std::string &pathName)
 	CC_SAFE_RETAIN(_pSprite);
 
 	this->setMoveSpeed(0.0f);
-
+	_bIsSpriteInit = true;
 	return true;
 }
 
@@ -40,4 +39,4 @@ int Coin::registerSelf(void)
 	return 0;
 }
 
-static int  a = Coin::registerSelf();
+static int  a = Coin::registerSelf();//注册，同时完成预生成
