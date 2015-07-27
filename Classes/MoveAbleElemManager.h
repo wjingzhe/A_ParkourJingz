@@ -12,7 +12,7 @@ class MoveAbleElem;
 class MoveAbleElemManager:public cocos2d::Ref
 {
 	typedef std::function<MoveAbleElemBaseFactory*(void)> FactoryCreateFunc;
-	friend class GameLayer;
+
 	MoveAbleElemManager();
 public:
 	
