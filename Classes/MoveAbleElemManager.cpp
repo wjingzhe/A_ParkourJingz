@@ -1,8 +1,6 @@
 #include "MoveAbleElemManager.h"
 #include "cocos2d.h"
-#include "MoveAbleElemFactory.h"
 #include "MoveAbleElem.h"
-
 #include "Obstacle.h"
 #include "Coin.h"
 #include "Player.h"
