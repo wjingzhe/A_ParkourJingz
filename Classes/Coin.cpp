@@ -33,11 +33,3 @@ void Coin::update(float dt)
 {
 
 }
-
-int Coin::registerSelf(void)
-{
-	MoveAbleElemManager::getInstance()->registerElemAndFactory(2, MoveAbleElemFactory<Coin>::create);
-	return 0;
-}
-
-static int  a = Coin::registerSelf();//注册，同时完成预生成
