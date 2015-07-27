@@ -1,6 +1,5 @@
 #include "Player.h"
-#include "MoveAbleElemManager.h"
-#include "MoveAbleElemFactory.h"
+
 
 USING_NS_CC;
 
@@ -36,11 +35,3 @@ bool Player::init(const std::string &pathName)
 
 	return true;
 }
-
-int Player::registerSelf(void)
-{
-	MoveAbleElemManager::getInstance()->registerElemAndFactory(4, MoveAbleElemFactory<Player>::create);
-	return 0;
-}
-
-//static int a = Player::registerSelf();//注册，同时完成预生成

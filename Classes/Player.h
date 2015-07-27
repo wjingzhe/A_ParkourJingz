@@ -12,8 +12,6 @@ public:
 	~Player();
 	bool init(const std::string &pathName = DEFAULT_MODEL_RES_PATH);
 
-	static int registerSelf(void);
-
 	static Player* create(const std::string &szModelPath = DEFAULT_MODEL_RES_PATH)
 	{
 		Player *pRet = new(std::nothrow) Player();
