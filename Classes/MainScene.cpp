@@ -3,7 +3,7 @@
 #include "BackgroundLayer.h"
 #include "GameLayer.h"
 USING_NS_CC;
-
+#include "ElemsPreloadManager.h"
 
 MainScene::MainScene() 
 	:_pSelfCamera(nullptr)
@@ -25,6 +25,8 @@ bool MainScene::init()
     {
         return false;
     }
+
+	ElemsPreloadManager::registerMoveAbleElemTypes();
 
 	Size winSize = Director::getInstance()->getWinSize();
 
