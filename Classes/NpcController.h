@@ -48,13 +48,19 @@ protected:
 	SequenceInfo pumpSequence();
 
 	//
-	cocos2d::Vec3 && calcuratePosWillHit(MoveAbleElem * pElemSrc, Player * pElemTar, float fDtToHit,const cocos2d::Vec3 & vOffset = cocos2d::Vec3(0.0f,0.f,0.f));
+	cocos2d::Vec3 && calcuratePosWillHit(MoveAbleElem * pElemSrc, Player * pElemTar, float fDtToHit);
 
 private:
 	MapSequences * _pCurMapSequences;
 	std::vector<MapSequences *> _vSequencesPtr;
 
+
+#ifdef STD_VECTOR_ELEM
 	std::vector<MoveAbleElem *> vpMoveableElems;
+#else
+	cocos2d::Vector<MoveAbleElem *> vpMoveableElems;
+#endif
+	
 
 	Player * _pPlayer;
 	cocos2d::Layer * _pGameLayer;

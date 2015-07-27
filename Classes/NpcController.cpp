@@ -15,6 +15,11 @@ USING_NS_CC;
 #define TRACK_1 1
 #define TRACK_2 2
 
+#ifdef STD_VECTOR_ELEM
+#define pushBack push_back
+#define popBack pop_back
+#endif
+
 NpcController::NpcController() :_pCurMapSequences(nullptr), _pPlayer(nullptr), _pGameLayer(nullptr), _fRecationDt(1.0f)
 {
 	//用时间函数初始化随机种子
@@ -59,7 +64,7 @@ bool NpcController::init(Player * pPlayer, cocos2d::Layer * pGameLayer)
 	MoveAbleElemManager::getInstance()->recycleElem(temp1);
 
 	auto temp2 = MoveAbleElemManager::getInstance()->GenerateOneElem(2);
-	_diffCoinWithPlay = calcuratePosWillHit(temp2, pPlayer, _fRecationDt * 4, Vec3(0, 0, -270));
+	_diffCoinWithPlay = calcuratePosWillHit(temp2, pPlayer, _fRecationDt * 5);
 	MoveAbleElemManager::getInstance()->recycleElem(temp2);
 
 
@@ -83,9 +88,10 @@ void NpcController::update(float delta)
 		{
 			//回收
 			auto pMoveAbleElem = *it;
+			CC_SAFE_RETAIN(pMoveAbleElem);
 			it = vpMoveableElems.erase(it);
 			MoveAbleElemManager::getInstance()->recycleElem(pMoveAbleElem);
-
+			CC_SAFE_RELEASE_NULL(pMoveAbleElem);
 		}
 		else
 		{
@@ -147,7 +153,7 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 	case MONSTER:\
 						{\
 			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(ELEM_ID);\
-			vpMoveableElems.push_back(temp);\
+			vpMoveableElems.pushBack(temp);\
 			pRenderNode->addChild(temp->getCurSprite());\
 			if(false) \
 			{ \
@@ -164,7 +170,7 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 	case COIN:\
 		{\
 			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(ELEM_ID); \
-			vpMoveableElems.push_back(temp);\
+			vpMoveableElems.pushBack(temp);\
 			pRenderNode->addChild(temp->getCurSprite()); \
 			temp->getCurSprite()->setPosition3D( \
 					 Vec3(POS_X, pPlayer->getCurSprite()->getPositionY() + _diffObstacleWithPlay.y, pPlayer->getCurSprite()->getPositionZ() + _diffObstacleWithPlay.z));  \
@@ -178,8 +184,13 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 	GEN_ELEMENTS(seq.right, POS_RIGHT);
 }
 
-cocos2d::Vec3 && NpcController::calcuratePosWillHit(MoveAbleElem * pElemSrc, Player * pElemTar, float fDtToHit, const Vec3 & vOffset)
+cocos2d::Vec3 && NpcController::calcuratePosWillHit(MoveAbleElem * pElemSrc, Player * pElemTar, float fDtToHit)
 {
+
+#ifndef STD_VECTOR_ELEM
+	CC_SAFE_RETAIN(pElemSrc);
+#endif
+
 	CC_SAFE_RETAIN(pElemTar);
 
 	auto pSpriteSrc =  pElemSrc->getCurSprite();
@@ -194,14 +205,24 @@ cocos2d::Vec3 && NpcController::calcuratePosWillHit(MoveAbleElem * pElemSrc, Pla
 	srcNormalDir = srcNormalDir * pElemSrc->getMoveSpeed();
 	tarNormalDir = tarNormalDir * pElemTar->getMoveSpeed();
 	auto tartDir = tarNormalDir - srcNormalDir;
+
 	tartDir *= fDtToHit;
 
-	tartDir += vOffset;
 	//pSpriteSrc->setPosition3D(pSpriteTar->getPosition3D() + tartDir + Vec3(0,-5,0));
 
 	CC_SAFE_RELEASE(pElemTar);
+
+#ifndef STD_VECTOR_ELEM
+	CC_SAFE_RELEASE(pElemSrc);
+#endif
 
 	return std::move(tartDir);
 
 	
 }
+
+
+#ifdef STD_VECTOR_ELEM
+#undef pushBack
+#undef popBack pop_back
+#endif
