@@ -10,8 +10,13 @@ public:
 
 	virtual ~MoveAbleElemBaseFactory()
 	{
-		_pPreGenElem.clear();
+		
 
+#ifdef STD_VECTOR_ELEM
+		for (auto it = _pPreGenElem.begin(); it != _pPreGenElem.end(); ++it)
+		{
+			delete(*it);
+		}
 		for (auto it = _vReadyElem.begin(); it != _vReadyElem.end(); ++it)
 		{
 			delete(*it);
@@ -20,6 +25,11 @@ public:
 		{
 			delete(*it);
 		}
+#else
+		_pPreGenElem.clear();
+		_vUsedElem.clear();
+		_vReadyElem.clear();
+#endif
 	}
 
 	virtual bool init()
@@ -41,15 +51,19 @@ public:
 	{
 	}
 
-	virtual void preLoadElem()
-	{
-
-	}
 
 protected:
+#ifdef STD_VECTOR_ELEM
 	std::vector<MoveAbleElem *> _vUsedElem;
 	std::vector<MoveAbleElem *> _vReadyElem;
 	std::vector<MoveAbleElem *> _pPreGenElem;
+#else
+	cocos2d::Vector<MoveAbleElem *> _vUsedElem;
+	cocos2d::Vector<MoveAbleElem *> _vReadyElem;
+	cocos2d::Vector<MoveAbleElem *> _pPreGenElem;
+	
+#endif
+	
 
 private:
 	
