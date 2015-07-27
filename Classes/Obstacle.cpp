@@ -17,16 +17,17 @@ Obstacle::~Obstacle()
 bool Obstacle::init(const std::string &szModelPath, const std::string &szTexturePath)
 {
 
+	
 	CC_SAFE_RELEASE_NULL(_pSprite);
-	_pSprite = Sprite3D::create(szModelPath);
+	_pSprite = Sprite3D::create(szModelPath, szTexturePath);
 	CC_SAFE_RETAIN(_pSprite);
-
-	_pSprite->setTexture(szTexturePath);
 	_pSprite->setLocalZOrder(100);//？？ //todo 
 	//_pSprite->setRotation3D(Vec3(-90, 0, 90));
 	_pSprite->setScale(0.1f);
 
 	this->setMoveSpeed(1.0f*60.0f);
+
+	_bIsSpriteInit = true;
 
 	return true;
 }
@@ -42,4 +43,4 @@ int Obstacle::registerSelf(void)
 	return 0;
 }
 
-static int  a = Obstacle::registerSelf();
+static int  a = Obstacle::registerSelf();//注册，同时完成预生成

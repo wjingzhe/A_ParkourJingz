@@ -10,6 +10,7 @@ class Obstacle :public MoveAbleElem
 #define DEFAULT_TEXTURE_RES_PATH  "model/zhu0928.jpg"
 protected:
 	Obstacle();
+
 public:
 	
 	virtual ~Obstacle();
@@ -19,9 +20,8 @@ public:
 	static Obstacle* create(const std::string &szModelPath = DEFAULT_MODEL_RES_PATH, const std::string &szTexturePath = DEFAULT_TEXTURE_RES_PATH)
 	{
 		Obstacle *pRet = new(std::nothrow) Obstacle();
-		if (pRet && pRet->init(szModelPath, szTexturePath))
+		if (pRet)
 		{
-			pRet->autorelease();
 			return pRet;
 		}
 		else
@@ -30,6 +30,11 @@ public:
 			pRet = NULL;
 			return NULL;
 		}
+	}
+
+	virtual void initSprite()
+	{
+		init();
 	}
 
 	virtual void update(float dt) override;
