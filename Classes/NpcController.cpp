@@ -53,6 +53,16 @@ bool NpcController::init(Player * pPlayer, cocos2d::Layer * pGameLayer)
 
 	this->insertMapSequence(new MapSequences());
 
+	//todo
+	auto temp1 = MoveAbleElemManager::getInstance()->GenerateOneElem(1);
+	_diffObstacleWithPlay = calcuratePosWillHit(temp1, pPlayer, _fRecationDt * 5);
+	MoveAbleElemManager::getInstance()->recycleElem(temp1);
+
+	auto temp2 = MoveAbleElemManager::getInstance()->GenerateOneElem(2);
+	_diffCoinWithPlay = calcuratePosWillHit(temp2, pPlayer, _fRecationDt * 4, Vec3(0, 0, -270));
+	MoveAbleElemManager::getInstance()->recycleElem(temp2);
+
+
 	Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
 
 	return true;
@@ -69,7 +79,7 @@ void NpcController::update(float delta)
 			//执行碰撞逻辑
 		}
 		//todo 300值在于我不知道如何获取模型的大小
-		else if ((*it)->getCurSprite()->getPositionZ() >= _pPlayer->getCurSprite()->getPositionZ() + 300)//非碰撞且远离玩家角色
+		else if ((*it)->getCurSprite()->getPositionZ() >= _pPlayer->getCurSprite()->getPositionZ() + 100)//非碰撞且远离玩家角色
 		{
 			//回收
 			auto pMoveAbleElem = *it;
@@ -101,7 +111,11 @@ void NpcController::randomGenElement(Player * pPlayer, cocos2d::Node * pRenderNo
 		generateObstacle(pPlayer, pRenderNode, dt);
 		fObstacleStepTime = 0.0f;
 	}
-
+	//if (Director::getInstance()->getFrameRate() < 50.0f)
+	//{
+	//	auto a = 1;
+	//	return;
+	//}
 }
 
 SequenceInfo NpcController::pumpSequence()
@@ -125,37 +139,35 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 #define POS_MIDDLE 0
 #define POS_RIGHT 10
 
-#define GEN_ELEMENTS(NUM,POS_X) switch(NUM) \
+#define GEN_ELEMENTS(ELEM_ID,POS_X) switch(ELEM_ID) \
 					{\
 	case EMPTY:\
 		break;\
 		\
 	case MONSTER:\
 						{\
-			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(NUM);\
+			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(ELEM_ID);\
 			vpMoveableElems.push_back(temp);\
 			pRenderNode->addChild(temp->getCurSprite());\
-			auto diffDir = this->calcuratePosWillHit(temp, pPlayer, _fRecationDt * 5);\
 			if(false) \
 			{ \
-				temp->getCurSprite()->setPosition3D(pPlayer->getCurSprite()->getPosition3D() + diffDir );\
+				temp->getCurSprite()->setPosition3D(pPlayer->getCurSprite()->getPosition3D() + _diffObstacleWithPlay );\
 			} \
 			else \
 			{\
 				temp->getCurSprite()->setPosition3D( \
-					 Vec3(POS_X, pPlayer->getCurSprite()->getPositionY() + diffDir.y, pPlayer->getCurSprite()->getPositionZ() + diffDir.z)); \
+					 Vec3(POS_X, pPlayer->getCurSprite()->getPositionY() + _diffObstacleWithPlay.y, pPlayer->getCurSprite()->getPositionZ() + _diffObstacleWithPlay.z)); \
 			}\
 		}\
 		break;\
 	   \
 	case COIN:\
 		{\
-			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(NUM); \
+			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(ELEM_ID); \
 			vpMoveableElems.push_back(temp);\
 			pRenderNode->addChild(temp->getCurSprite()); \
-			auto diffDir = this->calcuratePosWillHit(temp, pPlayer, _fRecationDt * 4,Vec3(0,0,-270));\
 			temp->getCurSprite()->setPosition3D( \
-					 Vec3(POS_X, pPlayer->getCurSprite()->getPositionY() + diffDir.y, pPlayer->getCurSprite()->getPositionZ() + diffDir.z));  \
+					 Vec3(POS_X, pPlayer->getCurSprite()->getPositionY() + _diffObstacleWithPlay.y, pPlayer->getCurSprite()->getPositionZ() + _diffObstacleWithPlay.z));  \
 			temp->getCurSprite()->setRotation3D(Vec3(90.0f, 0.0f, 180.0f));\
 		}\
 		break;\

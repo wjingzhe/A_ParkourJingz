@@ -60,4 +60,7 @@ private:
 	cocos2d::Layer * _pGameLayer;
 
 	float _fRecationDt;
+
+	cocos2d::Vec3 _diffCoinWithPlay;
+	cocos2d::Vec3 _diffObstacleWithPlay;
 };
