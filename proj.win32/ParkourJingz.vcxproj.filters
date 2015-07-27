@@ -75,6 +75,9 @@
     <ClCompile Include="..\Classes\MoveAbleElemManager.cpp">
       <Filter>src\Actors</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\ElemsPreloadManager.cpp">
+      <Filter>src\Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -132,6 +135,9 @@
       <Filter>src\Actors</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\MoveAbleElemBaseFactory.h">
+      <Filter>src\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ElemsPreloadManager.h">
       <Filter>src\Actors</Filter>
     </ClInclude>
   </ItemGroup>
