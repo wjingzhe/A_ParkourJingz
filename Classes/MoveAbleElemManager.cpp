@@ -95,4 +95,8 @@ MoveAbleElem * MoveAbleElemManager::GenerateOneElem(unsigned short iTypeId) thro
 void MoveAbleElemManager::registerElemAndFactory(unsigned short iTypeId, FactoryCreateFunc createFunc)
 {
 	_mFactoryCreatFunc.insert(make_pair(iTypeId, createFunc));
+
+	auto pFactory = createFunc();
+	_mElemFactories.insert(iTypeId, pFactory);
+
 }
