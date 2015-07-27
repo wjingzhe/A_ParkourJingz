@@ -1,5 +1,6 @@
 #include "Obstacle.h"
 #include "MoveAbleElemManager.h"
+#include "MoveAbleElemFactory.h"
 
 USING_NS_CC;
 
