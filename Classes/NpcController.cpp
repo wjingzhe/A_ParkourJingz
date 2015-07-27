@@ -60,8 +60,34 @@ bool NpcController::init(Player * pPlayer, cocos2d::Layer * pGameLayer)
 
 void NpcController::update(float delta)
 {
+	
+	//todo 检测碰撞和非碰撞回收
+	for (auto it = vpMoveableElems.begin(); it != vpMoveableElems.end();)
+	{
+		if (false)//有碰撞
+		{
+			//执行碰撞逻辑
+		}
+		//todo 300值在于我不知道如何获取模型的大小
+		else if ((*it)->getCurSprite()->getPositionZ() >= _pPlayer->getCurSprite()->getPositionZ() + 300)//非碰撞且远离玩家角色
+		{
+			//回收
+			auto pMoveAbleElem = *it;
+			it = vpMoveableElems.erase(it);
+			MoveAbleElemManager::getInstance()->recycleElem(pMoveAbleElem);
+
+		}
+		else
+		{
+			++it;
+		}
+	}
+
 	randomGenElement(_pPlayer, _pGameLayer, delta);
+
+
 }
+
 
 void NpcController::randomGenElement(Player * pPlayer, cocos2d::Node * pRenderNode, float dt)
 {
@@ -107,7 +133,7 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 	case MONSTER:\
 						{\
 			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(NUM);\
-			vpMoveableElems.pushBack(temp);\
+			vpMoveableElems.push_back(temp);\
 			pRenderNode->addChild(temp->getCurSprite());\
 			auto diffDir = this->calcuratePosWillHit(temp, pPlayer, _fRecationDt * 5);\
 			if(false) \
@@ -125,7 +151,7 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 	case COIN:\
 		{\
 			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(NUM); \
-			vpMoveableElems.pushBack(temp);\
+			vpMoveableElems.push_back(temp);\
 			pRenderNode->addChild(temp->getCurSprite()); \
 			auto diffDir = this->calcuratePosWillHit(temp, pPlayer, _fRecationDt * 4,Vec3(0,0,-270));\
 			temp->getCurSprite()->setPosition3D( \
@@ -142,9 +168,7 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 
 cocos2d::Vec3 && NpcController::calcuratePosWillHit(MoveAbleElem * pElemSrc, Player * pElemTar, float fDtToHit, const Vec3 & vOffset)
 {
-	CC_SAFE_RETAIN(pElemSrc);
 	CC_SAFE_RETAIN(pElemTar);
-
 
 	auto pSpriteSrc =  pElemSrc->getCurSprite();
 	auto pSpriteTar = pElemTar->getCurSprite();
@@ -163,8 +187,9 @@ cocos2d::Vec3 && NpcController::calcuratePosWillHit(MoveAbleElem * pElemSrc, Pla
 	tartDir += vOffset;
 	//pSpriteSrc->setPosition3D(pSpriteTar->getPosition3D() + tartDir + Vec3(0,-5,0));
 
+	CC_SAFE_RELEASE(pElemTar);
+
 	return std::move(tartDir);
 
-	CC_SAFE_RELEASE(pElemSrc);
-	CC_SAFE_RELEASE(pElemTar);
+	
 }

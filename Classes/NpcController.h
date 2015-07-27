@@ -54,7 +54,7 @@ private:
 	MapSequences * _pCurMapSequences;
 	std::vector<MapSequences *> _vSequencesPtr;
 
-	cocos2d::Vector<MoveAbleElem *> vpMoveableElems;
+	std::vector<MoveAbleElem *> vpMoveableElems;
 
 	Player * _pPlayer;
 	cocos2d::Layer * _pGameLayer;
