@@ -6,23 +6,34 @@
 #include <atomic>
 #include <exception>
 #include <iostream>
+#include "MoveAbleElem.h"
 
 static std::atomic_flag s_lock = ATOMIC_FLAG_INIT;
 
 #define INCREASEMENT 5
 #define PRE_CREATE_INCREASEMENT 15
 #define PRE_CREATE_BASE 30
+#define ELEM_MIN_REMAIN 5
+
+#ifdef STD_VECTOR_ELEM
+#define pushBack push_back
+#define popBack pop_back
+#endif
+
 
 #define ADD_MOVEABLE_ELEM(CONTAINER,SIZE) \
 		for (size_t i = 0; i < SIZE; ++i)\
 		{\
-			CONTAINER.push_back(MoveAbleElem::create()); \
-		}
+			auto p = T::createWithAutoRealse();\
+			CONTAINER.pushBack(p); \
+			p->release();	\
+		}\
+		
 
-template<class MoveAbleElem>
+template<class T>
 class MoveAbleElemFactory :public MoveAbleElemBaseFactory
 {
-	typedef MoveAbleElem* MoveAbleElemPtr;
+	typedef T* T_Ptr;
 protected:
 	MoveAbleElemFactory()
 	{
@@ -73,7 +84,7 @@ public:
 		}
 	}
 
-	virtual MoveAbleElemPtr getMoveAbleElem()
+	virtual T_Ptr getMoveAbleElem()
 	{
 		try
 		{
@@ -93,7 +104,7 @@ public:
 			}
 			for each (auto pMoveAbleElem in _pPreGenElem)
 			{
-				_vReadyElem.push_back(pMoveAbleElem);
+				_vReadyElem.pushBack(pMoveAbleElem);
 			}
 			_pPreGenElem.clear();
 			s_lock.clear();
@@ -105,12 +116,12 @@ public:
 		}
 
 		//todo 
-		MoveAbleElemPtr pElem = dynamic_cast<MoveAbleElemPtr >(_vReadyElem.back());//不用auto 是为了确认返回非const MoveAbleElem *
-		_vUsedElem.push_back(pElem);
+		T_Ptr pElem = dynamic_cast<T_Ptr >(_vReadyElem.back());//不用auto 是为了确认返回非const T *
+		_vUsedElem.pushBack(pElem);
 		pElem->setUsed();
-		_vReadyElem.pop_back();
+		_vReadyElem.popBack();
 
-		if (_vReadyElem.size()<=1)
+		if (_vReadyElem.size() <= ELEM_MIN_REMAIN)
 		{
 			auto & _lock = s_lock;
 			auto & _pPreGenElem = this->_pPreGenElem;
@@ -132,9 +143,9 @@ public:
 		return pElem;
 	}
 
-	virtual void recycleElem(MoveAbleElemPtr pElem)
+	virtual void recycleElem(MoveAbleElem * pElem)
 	{
-		_vReadyElem.push_back(pElem);
+		_vReadyElem.pushBack(pElem);
 		for (auto it = _vUsedElem.begin(); it != _vUsedElem.end(); ++it)
 		{
 			if (*it == pElem)
@@ -153,3 +164,7 @@ private:
 	std::future<void> _theadPreload;
 };
 
+#ifdef STD_VECTOR_ELEM
+#undef pushBack
+#undef popBack pop_back
+#endif
