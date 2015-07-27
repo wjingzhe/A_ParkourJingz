@@ -14,10 +14,14 @@ public:
 
 	bool init(const std::string &pathName = DEFAULT_MODEL_RES_PATH);
 
-	static Coin* create()
+	static Coin* createWithAutoRealse()
 	{
 		Coin *pRet = new(std::nothrow) Coin();
+#ifdef STD_VECTOR_ELEM
 		if (pRet)
+#else
+		if (pRet)
+#endif
 		{
 			return pRet;
 		}

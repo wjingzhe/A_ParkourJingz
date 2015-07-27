@@ -17,10 +17,14 @@ public:
 
 	bool init(const std::string &szModelPath = DEFAULT_MODEL_RES_PATH, const std::string &szTexturePath = DEFAULT_TEXTURE_RES_PATH);
 
-	static Obstacle* create(const std::string &szModelPath = DEFAULT_MODEL_RES_PATH, const std::string &szTexturePath = DEFAULT_TEXTURE_RES_PATH)
+	static Obstacle* createWithAutoRealse(const std::string &szModelPath = DEFAULT_MODEL_RES_PATH, const std::string &szTexturePath = DEFAULT_TEXTURE_RES_PATH)
 	{
 		Obstacle *pRet = new(std::nothrow) Obstacle();
+#ifdef STD_VECTOR_ELEM
 		if (pRet)
+#else
+		if (pRet)
+#endif
 		{
 			return pRet;
 		}

@@ -12,7 +12,11 @@
 
 */
 
+#ifdef STD_VECTOR_ELEM
 class MoveAbleElem
+#else
+class MoveAbleElem :public cocos2d::Ref
+#endif
 {
 protected:
 	MoveAbleElem() :_pSprite(nullptr), _vMoveDir(0, 0, 1), _fMoveSpeed(1.0f*60.0f)
@@ -71,6 +75,7 @@ public:
 
 	virtual void recycleSelf(void)
 	{
+		_pSprite->removeFromParent();
 		cocos2d::Director::getInstance()->getScheduler()->unscheduleUpdate(this);
 	}
 
