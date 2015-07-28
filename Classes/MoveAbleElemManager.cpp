@@ -18,6 +18,8 @@ MoveAbleElemManager::MoveAbleElemManager() :_mElemFactories({})
 
 MoveAbleElemManager::~MoveAbleElemManager()
 {
+	_mElemFactories.clear();
+	_mFactoryCreatFunc.clear();
 }
 
 MoveAbleElemManager * MoveAbleElemManager::getInstance(void)
