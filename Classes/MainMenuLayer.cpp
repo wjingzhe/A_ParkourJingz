@@ -1,5 +1,6 @@
 #include "MainMenuLayer.h"
 #include "cocostudio/CocoStudio.h"
+#include "ui/UIButton.h"
 
 USING_NS_CC;
 
@@ -22,8 +23,30 @@ bool MainMenuLayer::init()
 	}
 	auto widget = cocostudio::GUIReader::getInstance()->widgetFromJsonFile("HUD/HUD.json");
 	pGoldText = (ui::TextAtlas *)widget->getChildByName("gold");
-	pGoldText->setStringValue("0");
+	pGoldText->setString("0");
 	this->addChild(widget,100);
+
+	auto pauseButton = static_cast<cocos2d::ui::Button *>(widget->getChildByName("Button_1"));
+	pauseButton->addTouchEventListener(
+		[&](Ref * sender,cocos2d::ui::Widget::TouchEventType type)
+		{
+			static bool bIsPaused = false;
+			if (type == cocos2d::ui::Widget::TouchEventType::ENDED)
+			{
+				if (bIsPaused)
+				{
+					bIsPaused = false;
+					Director::getInstance()->resume();
+				}
+				else
+				{
+					Director::getInstance()->pause();
+					bIsPaused = true;
+				}
+			}//if_type
+			
+		}//lambdy
+	);
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
