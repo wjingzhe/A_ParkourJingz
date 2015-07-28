@@ -53,6 +53,8 @@ public:
 
 	void setMoveMode(MOVE_MODE mode);
 
+	void stopGame(void);
+
 private:
 	MapSceneController * _pMapSceneController;
 	PlayerController * _pPlayerController;

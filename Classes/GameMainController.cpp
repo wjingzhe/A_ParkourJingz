@@ -15,12 +15,18 @@ GameMainController::GameMainController()
 
 GameMainController::~GameMainController()
 {
+	if (_pEventListenerAfterDraw)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerAfterDraw);
+		CC_SAFE_RELEASE_NULL(_pEventListenerAfterDraw);
+	}
+
 	CC_SAFE_RELEASE_NULL(_pPlayerController);
 	CC_SAFE_RELEASE_NULL(_pMapSceneController);
 	CC_SAFE_RELEASE_NULL(_pNpcController);
 
-	Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerAfterDraw);
-	CC_SAFE_RELEASE_NULL(_pEventListenerAfterDraw);
+	CC_SAFE_RELEASE_NULL(_pGameLayer);
+
 }
 
 bool GameMainController::init(Player * pPlayer,Layer * pGameLayer)
@@ -28,6 +34,8 @@ bool GameMainController::init(Player * pPlayer,Layer * pGameLayer)
 	CC_SAFE_RETAIN(pGameLayer);
 	CC_SAFE_RELEASE(_pGameLayer);
 	_pGameLayer = pGameLayer;
+
+	CC_SAFE_RETAIN(pPlayer);
 
 	CC_SAFE_RELEASE_NULL(_pMapSceneController);
 	_pMapSceneController = MapSceneController::create(pPlayer, pGameLayer);
@@ -42,7 +50,7 @@ bool GameMainController::init(Player * pPlayer,Layer * pGameLayer)
 	CC_SAFE_RETAIN(_pNpcController);
 
 
-	
+	CC_SAFE_RELEASE_NULL(pPlayer);
 	
 
 	CC_SAFE_RELEASE_NULL(_pEventListenerAfterDraw);
@@ -52,8 +60,7 @@ bool GameMainController::init(Player * pPlayer,Layer * pGameLayer)
 		Director::EVENT_AFTER_DRAW, 
 		std::bind(&GameMainController::onAfterDraw, this, std::placeholders::_1)
 		);
-
-	_pEventListenerAfterDraw->retain();//ÎÒ¹ÊÒâµÄ
+	CC_SAFE_RETAIN(_pEventListenerAfterDraw);
 
 	return true;
 }
@@ -103,4 +110,18 @@ void GameMainController::setMoveMode(MOVE_MODE mode)
 	default:
 		break;
 	}
+}
+void GameMainController::stopGame(void)
+{
+	if (_pEventListenerAfterDraw)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerAfterDraw);
+		CC_SAFE_RELEASE_NULL(_pEventListenerAfterDraw);
+	}
+	_pPlayerController->stopGame();
+	_pMapSceneController->stopGame();
+	_pNpcController->stopGame();
+
+	
+	
 }
