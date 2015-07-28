@@ -10,7 +10,6 @@ Obstacle::Obstacle()
 
 Obstacle::~Obstacle()
 {
-	CC_SAFE_RELEASE_NULL(_pSprite);
 }
 
 bool Obstacle::init(const std::string &szModelPath, const std::string &szTexturePath)
@@ -35,4 +34,25 @@ void Obstacle::update(float dt)
 {
 	auto moveStep = this->getMoveSpeed() * dt * this->getMoveDirNormal();
 	_pSprite->setPosition3D(_pSprite->getPosition3D() + moveStep);
+}
+
+void Obstacle::beHitted(MoveAbleElem * pMoveAbleElem)
+{
+	//todo
+	//如果是子弹类型，则播放死亡特效
+
+	//如果是玩家，则不处理
+}
+
+void Obstacle::recycleSelf(void)
+{
+	_pSprite->setLocalZOrder(100);//？？ //todo 
+	//_pSprite->setRotation3D(Vec3(-90, 0, 90));
+	_pSprite->setScale(0.1f);
+
+	this->setMoveSpeed(1.0f*60.0f);
+
+	_bIsSpriteInit = true;
+
+	MoveAbleElem::recycleSelf();
 }
