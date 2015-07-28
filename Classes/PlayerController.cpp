@@ -21,6 +21,7 @@ PlayerController::PlayerController(Player * player)
 
 PlayerController::~PlayerController()
 {
+	Director::getInstance()->getScheduler()->unscheduleUpdate(this);
 	CC_SAFE_RELEASE_NULL(this->_pPlayer);
 }
 
@@ -163,4 +164,9 @@ void PlayerController::update(float delta)
 
 	}
 	
+}
+
+void PlayerController::stopGame(void)
+{
+	Director::getInstance()->getScheduler()->unscheduleAllForTarget(this);
 }

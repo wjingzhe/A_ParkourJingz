@@ -24,6 +24,8 @@ public:
 
 	void update(float delta);
 
+	void stopGame(void);
+
 private:
 	CC_DISALLOW_COPY_AND_ASSIGN(PlayerController);
 
