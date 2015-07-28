@@ -172,6 +172,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y</Command>
     <ClInclude Include="..\Classes\MoveAbleElemBaseFactory.h" />
     <ClInclude Include="..\Classes\MoveAbleElemFactory.h" />
     <ClInclude Include="..\Classes\MoveAbleElemManager.h" />
+    <ClInclude Include="..\Classes\MoveAbleElemTypeDefines.h" />
     <ClInclude Include="..\Classes\Obstacle.h" />
     <ClInclude Include="..\Classes\NpcController.h" />
     <ClInclude Include="..\Classes\Player.h" />

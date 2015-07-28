@@ -140,6 +140,9 @@
     <ClInclude Include="..\Classes\ElemsPreloadManager.h">
       <Filter>src\Actors</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\MoveAbleElemTypeDefines.h">
+      <Filter>src\Actors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
