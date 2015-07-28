@@ -41,12 +41,9 @@ public:
 	virtual void update(float dt) override;
 
 	//自己被击效果
-	virtual void beHitted(MoveAbleElem * pMoveAbleElem)
-	{
-		//todo 加钱
-	}
+	virtual void beHitted(MoveAbleElem * pMoveAbleElem);
 
 private:
-
+	int _iGold;
 };
 

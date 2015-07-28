@@ -1,18 +1,19 @@
 #include "Coin.h"
 #include "MoveAbleElemTypeDefines.h"
+#include "RegitsteredEvents.h"
 
 USING_NS_CC;
 
-
+#define COMMON_COIN 10;
 
 Coin::Coin()
 {
 	_iElemTypeId = COIN_TYPE_ID;
+	_iGold = COMMON_COIN;
 }
 
 Coin::~Coin()
 {
-	CC_SAFE_RELEASE_NULL(_pSprite);
 }
 
 bool Coin::init(const std::string &pathName)
@@ -33,4 +34,10 @@ bool Coin::init(const std::string &pathName)
 void Coin::update(float dt)
 {
 
+}
+
+void Coin::beHitted(MoveAbleElem * pMoveAbleElem)
+{
+	//todo ¼ÓÇ®
+	Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RegitsteredEvents::GOLD_CHANGED, new int(_iGold));
 }
