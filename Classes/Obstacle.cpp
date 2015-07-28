@@ -1,10 +1,11 @@
 #include "Obstacle.h"
+#include "MoveAbleElemTypeDefines.h"
 
 USING_NS_CC;
 
 Obstacle::Obstacle()
 {
-	_iElemTypeId = 1;
+	_iElemTypeId = OBSTACLE__ID;
 }
 
 Obstacle::~Obstacle()

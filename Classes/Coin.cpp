@@ -1,10 +1,13 @@
 #include "Coin.h"
+#include "MoveAbleElemTypeDefines.h"
 
 USING_NS_CC;
 
+
+
 Coin::Coin()
 {
-	_iElemTypeId = 2;
+	_iElemTypeId = COIN_TYPE_ID;
 }
 
 Coin::~Coin()

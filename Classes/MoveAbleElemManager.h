@@ -28,13 +28,15 @@ public:
 
 	//jingz 
 	// !!!! take care,if caused a out_of_range exception
-	MoveAbleElem * GenerateOneElem(unsigned short iTypeId) throw (std::out_of_range);
+	MoveAbleElem * GenerateOneElem(unsigned int iTypeId) throw (std::out_of_range);
 
-	void registerElemAndFactory(unsigned short iTypeId, FactoryCreateFunc createFunc);
+	void registerElemAndFactory(unsigned int iTypeId, FactoryCreateFunc createFunc);
+
+	MoveAbleElemBaseFactory* getElemFactory(unsigned int iTypeId);
 
 private:
 	static MoveAbleElemManager * s_pMoveAbleElemManager;
 	
-	cocos2d::Map<unsigned short, MoveAbleElemBaseFactory * > _mElemFactories;
-	std::map<unsigned short, FactoryCreateFunc> _mFactoryCreatFunc;
+	cocos2d::Map<unsigned int, MoveAbleElemBaseFactory * > _mElemFactories;
+	std::map<unsigned int, FactoryCreateFunc> _mFactoryCreatFunc;
 };

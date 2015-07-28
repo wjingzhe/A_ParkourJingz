@@ -51,7 +51,7 @@ void MoveAbleElemManager::recycleElem(MoveAbleElem * pMoveAbleElem)
 	_mElemFactories.at(pMoveAbleElem->getElemType())->recycleElem(pMoveAbleElem);
 }
 
-MoveAbleElem * MoveAbleElemManager::GenerateOneElem(unsigned short iTypeId) throw (std::out_of_range)
+MoveAbleElem * MoveAbleElemManager::GenerateOneElem(unsigned int iTypeId) throw (std::out_of_range)
 {
 	try
 	{
@@ -92,11 +92,24 @@ MoveAbleElem * MoveAbleElemManager::GenerateOneElem(unsigned short iTypeId) thro
 
 }
 
-void MoveAbleElemManager::registerElemAndFactory(unsigned short iTypeId, FactoryCreateFunc createFunc)
+void MoveAbleElemManager::registerElemAndFactory(unsigned int iTypeId, FactoryCreateFunc createFunc)
 {
 	_mFactoryCreatFunc.insert(make_pair(iTypeId, createFunc));
 
 	auto pFactory = createFunc();
 	_mElemFactories.insert(iTypeId, pFactory);
 
+}
+
+MoveAbleElemBaseFactory * MoveAbleElemManager::getElemFactory(unsigned int iTypeId)
+{
+	for each (auto it in _mElemFactories)
+	{
+		if (it.first == iTypeId)
+		{
+			return it.second;
+		}
+
+	}
+	return nullptr;
 }

@@ -4,11 +4,11 @@
 
 struct SequenceInfo
 {
-	unsigned short left;
-	unsigned short middle;
-	unsigned short right;
+	unsigned int left;
+	unsigned int middle;
+	unsigned int right;
 
-	SequenceInfo(unsigned short left, unsigned short middle, unsigned short right)
+	SequenceInfo(unsigned int left, unsigned int middle, unsigned int right)
 	{
 		this->left = left;
 		this->middle = middle;
@@ -16,10 +16,6 @@ struct SequenceInfo
 	}
 };
 
-
-#define EMPTY 0
-#define MONSTER 1
-#define COIN 2
 
 class MapSequences
 {
@@ -40,7 +36,7 @@ public:
 	}
 
 protected:
-	void addSequences(unsigned short l, unsigned short m, unsigned short r);
+	void addSequences(unsigned int l, unsigned int m, unsigned int r);
 
 private:
 	unsigned int _iCurIndex;

@@ -7,6 +7,8 @@
 #include "MoveAbleElemManager.h"
 #include "MoveAbleElemFactory.h"
 
+#include "MoveAbleElemTypeDefines.h"
+
 bool ElemsPreloadManager::s_bRegisterd = false;
 
 ElemsPreloadManager::ElemsPreloadManager()
@@ -20,10 +22,10 @@ ElemsPreloadManager::~ElemsPreloadManager()
 
 void ElemsPreloadManager::registerMoveAbleElemTypes(void)
 {
-	//MoveAbleElemManager::getInstance()->registerElemAndFactory(4, MoveAbleElemFactory<Player>::create);
+	//MoveAbleElemManager::getInstance()->registerElemAndFactory(PLAYER_TYPE_ID, MoveAbleElemFactory<Player>::create);
 
-	MoveAbleElemManager::getInstance()->registerElemAndFactory(1, MoveAbleElemFactory<Obstacle>::create);
-	MoveAbleElemManager::getInstance()->registerElemAndFactory(2, MoveAbleElemFactory<Coin>::create);
+	MoveAbleElemManager::getInstance()->registerElemAndFactory(OBSTACLE__ID, MoveAbleElemFactory<Obstacle>::create);
+	MoveAbleElemManager::getInstance()->registerElemAndFactory(COIN_TYPE_ID, MoveAbleElemFactory<Coin>::create);
 	s_bRegisterd = true;
 }
 
@@ -33,6 +35,6 @@ void ElemsPreloadManager::preCreateMoveAbleElems(void)
 	{
 		ElemsPreloadManager::registerMoveAbleElemTypes();
 	}
-	MoveAbleElemManager::getInstance()->GenerateOneElem(1);
-	MoveAbleElemManager::getInstance()->GenerateOneElem(2);
+	MoveAbleElemManager::getInstance()->GenerateOneElem(OBSTACLE__ID);
+	MoveAbleElemManager::getInstance()->GenerateOneElem(COIN_TYPE_ID);
 }

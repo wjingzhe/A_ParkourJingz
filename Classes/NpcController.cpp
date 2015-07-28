@@ -6,7 +6,7 @@
 #include "MapSequences.h"
 #include "Player.h"
 #include "MoveAbleElemManager.h"
-
+#include "MoveAbleElemTypeDefines.h"
 
 USING_NS_CC;
 
@@ -59,11 +59,11 @@ bool NpcController::init(Player * pPlayer, cocos2d::Layer * pGameLayer)
 	this->insertMapSequence(new MapSequences());
 
 	//todo
-	auto temp1 = MoveAbleElemManager::getInstance()->GenerateOneElem(1);
+	auto temp1 = MoveAbleElemManager::getInstance()->GenerateOneElem(OBSTACLE__ID);
 	_diffObstacleWithPlay = calcuratePosWillHit(temp1, pPlayer, _fRecationDt * 5);
 	MoveAbleElemManager::getInstance()->recycleElem(temp1);
 
-	auto temp2 = MoveAbleElemManager::getInstance()->GenerateOneElem(2);
+	auto temp2 = MoveAbleElemManager::getInstance()->GenerateOneElem(COIN_TYPE_ID);
 	_diffCoinWithPlay = calcuratePosWillHit(temp2, pPlayer, _fRecationDt * 5);
 	MoveAbleElemManager::getInstance()->recycleElem(temp2);
 
@@ -79,9 +79,20 @@ void NpcController::update(float delta)
 	//todo 检测碰撞和非碰撞回收
 	for (auto it = vpMoveableElems.begin(); it != vpMoveableElems.end();)
 	{
-		if (false)//有碰撞
+		auto pMoveAbleElem = *it;
+		auto obb = OBB(pMoveAbleElem->getCurSprite()->getAABB());
+		auto obbPlayer = OBB(_pPlayer->getCurSprite()->getAABB());
+
+		if (obb.intersects(obbPlayer))//有碰撞
 		{
-			//执行碰撞逻辑
+			//执行碰撞逻辑			 
+			pMoveAbleElem->hitOthers(_pPlayer);
+
+			CC_SAFE_RETAIN(pMoveAbleElem);
+			it = vpMoveableElems.erase(it);
+			MoveAbleElemManager::getInstance()->recycleElem(pMoveAbleElem);
+			CC_SAFE_RELEASE_NULL(pMoveAbleElem);
+			
 		}
 		//todo 300值在于我不知道如何获取模型的大小
 		else if ((*it)->getCurSprite()->getPositionZ() >= _pPlayer->getCurSprite()->getPositionZ() + 100)//非碰撞且远离玩家角色
@@ -150,7 +161,7 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 	case EMPTY:\
 		break;\
 		\
-	case MONSTER:\
+	case OBSTACLE__ID:\
 						{\
 			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(ELEM_ID);\
 			vpMoveableElems.pushBack(temp);\
@@ -167,7 +178,7 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 		}\
 		break;\
 	   \
-	case COIN:\
+	case COIN_TYPE_ID:\
 		{\
 			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(ELEM_ID); \
 			vpMoveableElems.pushBack(temp);\

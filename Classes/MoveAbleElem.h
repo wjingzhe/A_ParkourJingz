@@ -63,12 +63,12 @@ public:
 
 	}
 
-	unsigned short getElemType()
+	unsigned int getElemType()
 	{
 		return _iElemTypeId;
 	}
 
-	void setElemType(unsigned short iTypeId)
+	void setElemType(unsigned int iTypeId)
 	{
 		_iElemTypeId = iTypeId;
 	}
@@ -102,10 +102,26 @@ public:
 		CC_SAFE_RETAIN(_pSprite);
 	}
 
+
+	virtual void hitOthers(MoveAbleElem * pMoveAbleElem)
+	{
+		//目标对象受击处理
+		pMoveAbleElem->beHitted(this);
+
+		//自身状态处理
+		this->beHitted(pMoveAbleElem);
+	}
+
+	//自己被击效果
+	virtual void beHitted(MoveAbleElem * pMoveAbleElem)
+	{
+
+	}
+
 protected:
 	cocos2d::Sprite3D * _pSprite;
 	float _fMoveSpeed;
 	cocos2d::Vec3 _vMoveDir;
 	bool _bIsSpriteInit;
-	unsigned short _iElemTypeId;
+	unsigned int _iElemTypeId;
 };

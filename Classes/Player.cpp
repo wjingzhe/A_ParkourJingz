@@ -1,12 +1,12 @@
 #include "Player.h"
-
+#include "MoveAbleElemTypeDefines.h"
 
 USING_NS_CC;
 
 Player::Player()
 {
 	_vMoveDir = Vec3(0, 0, -1.0f), _fMoveSpeed = 1.0f*60.0f;
-	_iElemTypeId = 4;
+	_iElemTypeId = PLAYER_TYPE_ID;
 }
 
 Player::~Player()
@@ -34,4 +34,10 @@ bool Player::init(const std::string &pathName)
 	_bIsSpriteInit = true;
 
 	return true;
+}
+
+//自己被击效果
+void Player::beHitted(MoveAbleElem * pMoveAbleElem)
+{
+
 }

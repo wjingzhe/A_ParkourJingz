@@ -1,80 +1,81 @@
 #include "MapSequences.h"
 #include <cassert>
 #include "cocos2d\external\tinyxml2\tinyxml2.h"
+#include "MoveAbleElemTypeDefines.h"
 
 using namespace std;
 using namespace tinyxml2;
 
 MapSequences::MapSequences() :_iCurIndex(0)
 {
-	addSequences(0, 0, 2);
-	addSequences(0, 0, 2);
-	addSequences(0, 0, 2);
-	addSequences(0, 0, 2);
-	addSequences(0, 0, 2);
-	addSequences(0, 0, 2);
-	addSequences(0, 0, 2);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
+	addSequences(0, 0, COIN_TYPE_ID);
+	addSequences(0, 0, COIN_TYPE_ID);
+	addSequences(0, 0, COIN_TYPE_ID);
+	addSequences(0, 0, COIN_TYPE_ID);
+	addSequences(0, 0, COIN_TYPE_ID);
+	addSequences(0, 0, COIN_TYPE_ID);
+	addSequences(0, 0, COIN_TYPE_ID);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
 	addSequences(0, 0, 0);
 	addSequences(0, 0, 0);
 	addSequences(0, 0, 0);
 	addSequences(0, 0, 0);
 	addSequences(0, 0, 0);
 	addSequences(0, 0, 0);
-	addSequences(0, 0, 1);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 1, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(1, 0, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(1, 1, 0);
+	addSequences(0, 0, OBSTACLE__ID);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, OBSTACLE__ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(OBSTACLE__ID, 0, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(OBSTACLE__ID, OBSTACLE__ID, 0);
 	addSequences(0, 0, 0);
 	addSequences(0, 0, 0);
-	addSequences(0, 1, 0);
+	addSequences(0, OBSTACLE__ID, 0);
 	addSequences(0, 0, 0);
 	addSequences(0, 0, 0);
-	addSequences(1, 0, 0);
-	addSequences(1, 1, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 0, 1);
-	addSequences(0, 1, 0);
-	addSequences(0, 2, 0);
-	addSequences(0, 2, 0);
-	addSequences(1, 1, 0);
-	addSequences(1, 1, 0);
+	addSequences(OBSTACLE__ID, 0, 0);
+	addSequences(OBSTACLE__ID, OBSTACLE__ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, 0, OBSTACLE__ID);
+	addSequences(0, OBSTACLE__ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(0, COIN_TYPE_ID, 0);
+	addSequences(OBSTACLE__ID, OBSTACLE__ID, 0);
+	addSequences(OBSTACLE__ID, OBSTACLE__ID, 0);
 	addSequences(0, 0, 0);
 	addSequences(0, 0, 0);
-	addSequences(0, 1, 1);
-	addSequences(0, 1, 1);
-	addSequences(0, 1, 1);
-	addSequences(0, 1, 1);
-	addSequences(0, 1, 1);
-	addSequences(0, 1, 1);
-	addSequences(0, 0, 1);
+	addSequences(0, OBSTACLE__ID, OBSTACLE__ID);
+	addSequences(0, OBSTACLE__ID, OBSTACLE__ID);
+	addSequences(0, OBSTACLE__ID, OBSTACLE__ID);
+	addSequences(0, OBSTACLE__ID, OBSTACLE__ID);
+	addSequences(0, OBSTACLE__ID, OBSTACLE__ID);
+	addSequences(0, OBSTACLE__ID, OBSTACLE__ID);
+	addSequences(0, 0, OBSTACLE__ID);
 	addSequences(0, 0, 0);
-	addSequences(0, 1, 0);
-	addSequences(1, 1, 0);
-	addSequences(1, 1, 0);
+	addSequences(0, OBSTACLE__ID, 0);
+	addSequences(OBSTACLE__ID, OBSTACLE__ID, 0);
+	addSequences(OBSTACLE__ID, OBSTACLE__ID, 0);
 	addSequences(0, 0, 0);
 	addSequences(0, 0, 0);
-	addSequences(0, 1, 1);
-	addSequences(0, 1, 1);
-	addSequences(0, 1, 1);
+	addSequences(0, OBSTACLE__ID, OBSTACLE__ID);
+	addSequences(0, OBSTACLE__ID, OBSTACLE__ID);
+	addSequences(0, OBSTACLE__ID, OBSTACLE__ID);
 	addSequences(0, 0, 0);
 	addSequences(0, 0, 0);
 	addSequences(0, 0, 0);
@@ -104,7 +105,7 @@ MapSequences::~MapSequences()
 {
 }
 
-void MapSequences::addSequences(unsigned short l, unsigned short m, unsigned short r)
+void MapSequences::addSequences(unsigned int l, unsigned int m, unsigned int r)
 {
 	_vSequences.push_back(std::move(SequenceInfo(l, m, r)));
 }
