@@ -54,6 +54,7 @@ public:
 		init();
 	}
 
+	virtual void beHitted(MoveAbleElem * pMoveAbleElem);
 	
 private:
 };

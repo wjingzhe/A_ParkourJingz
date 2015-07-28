@@ -43,5 +43,14 @@ public:
 
 	virtual void update(float dt) override;
 
+	//自己被击效果
+	virtual void beHitted(MoveAbleElem * pMoveAbleElem)
+	{
+		//todo
+		//如果是子弹类型，则播放死亡特效
+
+		//如果是玩家，则不处理
+	}
+
 private:
 };
