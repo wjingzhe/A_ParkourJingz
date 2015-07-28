@@ -43,6 +43,7 @@ public:
 
 	void stopMoveScene(void);
 
+	void stopGame(void);
 
 private:
 	Player * _pPlayer;

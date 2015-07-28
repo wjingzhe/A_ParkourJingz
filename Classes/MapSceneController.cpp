@@ -18,14 +18,19 @@ MapSceneController::MapSceneController()
 
 MapSceneController::~MapSceneController()
 {
+	Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+	if (_pEventListenerAfterUpdate)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerAfterUpdate);
+		CC_SAFE_RELEASE_NULL(_pEventListenerAfterUpdate);
+	}
+	
+	_vpRoadSprites.clear();
 
 	CC_SAFE_RELEASE_NULL(_pPlayer);
 	CC_SAFE_RELEASE_NULL(_pGameLayer);
 	
-	Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerAfterUpdate);
-	CC_SAFE_RELEASE_NULL(_pEventListenerAfterUpdate);
-
-	_vpRoadSprites.clear();
+	
 }
 
 bool MapSceneController::init(Player * pPlayer, cocos2d::Layer * pGameLayer)
@@ -53,7 +58,7 @@ bool MapSceneController::init(Player * pPlayer, cocos2d::Layer * pGameLayer)
 	//std::bind(MapSceneController::afferUpdateCallback, this, std::placeholders::_1) == CC_CALLBACK_1(MapSceneController::afferUpdateCallback, this)
 	_pEventListenerAfterUpdate = Director::getInstance()->getEventDispatcher()->addCustomEventListener
 		(
-		Director::EVENT_AFTER_UPDATE, std::bind(&MapSceneController::afferUpdateCallback, this, std::placeholders::_1)
+		Director::EVENT_AFTER_UPDATE, CC_CALLBACK_1(MapSceneController::afferUpdateCallback, this)
 		);
 	
 	CC_SAFE_RETAIN(_pEventListenerAfterUpdate);
@@ -154,3 +159,12 @@ void MapSceneController::stopMoveScene(void)
 	_bMoveSceneMode = false;
 }
 
+void MapSceneController::stopGame(void)
+{
+	if (_pEventListenerAfterUpdate)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerAfterUpdate);
+		CC_SAFE_RELEASE_NULL(_pEventListenerAfterUpdate);
+	}
+	Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+}
