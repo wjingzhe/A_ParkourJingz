@@ -29,8 +29,8 @@ public:
 
 	virtual ~MoveAbleElem()
 	{
-		CC_SAFE_RELEASE_NULL(_pSprite);
 		cocos2d::Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+		CC_SAFE_RELEASE_NULL(_pSprite);
 	}
 
 	virtual cocos2d::Sprite3D * getCurSprite(void)
@@ -103,13 +103,14 @@ public:
 	}
 
 
-	virtual void hitOthers(MoveAbleElem * pMoveAbleElem)
+	virtual void hitOthers(MoveAbleElem * pMoveAbleElem, std::function<void(void)> callback = [](){})
 	{
 		//目标对象受击处理
 		pMoveAbleElem->beHitted(this);
-
 		//自身状态处理
 		this->beHitted(pMoveAbleElem);
+		//回调
+		callback();
 	}
 
 	//自己被击效果
