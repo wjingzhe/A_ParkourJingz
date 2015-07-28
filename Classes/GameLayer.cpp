@@ -17,7 +17,7 @@ GameLayer::~GameLayer()
 	if (_pTouchListenerOneByOne != nullptr)
 	{
 		this->getEventDispatcher()->removeEventListener(_pTouchListenerOneByOne);
-		_pTouchListenerOneByOne = nullptr;
+		CC_SAFE_RELEASE_NULL(_pTouchListenerOneByOne);
 	}
 	CC_SAFE_RELEASE_NULL(_pPlayer);
 	CC_SAFE_RELEASE_NULL(_pGameMainController);
@@ -61,10 +61,11 @@ void GameLayer::onEnter()
 	if (_pTouchListenerOneByOne != nullptr)
 	{
 		this->getEventDispatcher()->removeEventListener(_pTouchListenerOneByOne);
-		_pTouchListenerOneByOne = nullptr;
+		CC_SAFE_RELEASE_NULL(_pTouchListenerOneByOne);
 	}
 
 	_pTouchListenerOneByOne = EventListenerTouchOneByOne::create();
+	CC_SAFE_RETAIN(_pTouchListenerOneByOne);
 
 	_pTouchListenerOneByOne->setSwallowTouches(true);
 
@@ -73,14 +74,18 @@ void GameLayer::onEnter()
 
 	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_pTouchListenerOneByOne, this);
 
+
 	CCLayer::onEnter();
 
 }
 
 void GameLayer::onExit()
 {
-	this->getEventDispatcher()->removeEventListener(_pTouchListenerOneByOne);
-	_pTouchListenerOneByOne = nullptr;
+	if (_pTouchListenerOneByOne != nullptr)
+	{
+		this->getEventDispatcher()->removeEventListener(_pTouchListenerOneByOne);
+		CC_SAFE_RELEASE_NULL(_pTouchListenerOneByOne);
+	}
 
 	CCLayer::onExit();
 }
@@ -94,4 +99,15 @@ bool GameLayer::onTouchBegan(Touch *touch, Event *unused_event)
 void GameLayer::onTouchEnded(Touch *touch, Event *unused_event)
 {
 	_pGameMainController->onTouchEnded(touch, unused_event);
+}
+
+void GameLayer::stopGame(void)
+{
+	if (_pTouchListenerOneByOne != nullptr)
+	{
+		this->getEventDispatcher()->removeEventListener(_pTouchListenerOneByOne);
+		CC_SAFE_RELEASE_NULL(_pTouchListenerOneByOne);
+	}
+
+	_pGameMainController->stopGame();
 }

@@ -25,6 +25,8 @@ public:
 
 	CC_DISALLOW_COPY_AND_ASSIGN(GameLayer);
 
+	void stopGame(void);
+
 private:
 	cocos2d::EventListenerTouchOneByOne * _pTouchListenerOneByOne;
 	Player * _pPlayer;
