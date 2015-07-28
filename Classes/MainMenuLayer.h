@@ -27,16 +27,22 @@ public:
 
 protected:
 
-	void ChangeGold(signed int increament)
+	void ChangeGold(cocos2d::EventCustom * pEvent)
 	{
-		s_iCurrentGold += increament;
+		int * pIncreament = static_cast<int *>(pEvent->getUserData());		
+		s_iCurrentGold += *pIncreament;
 		char str[20];
-		sprintf_s(str, "%d", s_iCurrentGold);
-		pGoldText->setString(str);
+		sprintf_s(str, "%ld", s_iCurrentGold);
+		_pGoldText->setString(str);
+		delete pIncreament;
 	}
 
+	void showRestart(cocos2d::EventCustom * pEvent);
+
 private:
-	cocos2d::ui::TextAtlas * pGoldText;
-	static int s_iCurrentGold;
+	cocos2d::ui::TextAtlas * _pGoldText;
+	cocos2d::ui::Widget* _pRestartButton;
+	cocos2d::ui::Widget* _pPauseButton;
+	static long s_iCurrentGold;
 };
 
