@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "MoveAbleElemTypeDefines.h"
+#include "RegitsteredEvents.h"
 
 USING_NS_CC;
 
@@ -11,7 +12,6 @@ Player::Player()
 
 Player::~Player()
 {
-	CC_SAFE_RELEASE_NULL(_pSprite);
 }
 
 bool Player::init(const std::string &pathName)
@@ -39,5 +39,10 @@ bool Player::init(const std::string &pathName)
 //自己被击效果
 void Player::beHitted(MoveAbleElem * pMoveAbleElem)
 {
-
+	if (pMoveAbleElem->getElemType() == OBSTACLE__ID)
+	{
+		//TODO 此处应该播放死亡动作后回调派发死亡消息，暂时不知道死亡动作
+		_pSprite->stopAllActions();
+		Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RegitsteredEvents::SHOW_RESTART);
+	}
 }

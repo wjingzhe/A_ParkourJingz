@@ -14,7 +14,7 @@ class Player :public MoveAbleElem
 #define DEFAULT_MODEL_RES_PATH "model/zhanshi_pao.c3b"
 	Player();
 public:
-	~Player();
+	virtual ~Player();
 	bool init(const std::string &pathName = DEFAULT_MODEL_RES_PATH);
 
 	static Player* createWithAutoRealse(const std::string &szModelPath = DEFAULT_MODEL_RES_PATH)
