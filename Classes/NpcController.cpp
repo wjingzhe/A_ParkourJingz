@@ -28,6 +28,7 @@ NpcController::NpcController() :_pCurMapSequences(nullptr), _pPlayer(nullptr), _
 
 NpcController::~NpcController()
 {
+	Director::getInstance()->getScheduler()->unscheduleUpdate(this);
 	if (_pCurMapSequences !=nullptr)
 	{
 		_pCurMapSequences = nullptr;
@@ -38,6 +39,13 @@ NpcController::~NpcController()
 		delete ptr;
 	}
 	_vSequencesPtr.clear();
+
+#ifdef STD_VECTOR_ELEM
+	vpMoveableElems.clear();
+#else
+	vpMoveableElems.clear();
+#endif
+
 
 	CC_SAFE_RELEASE_NULL(_pPlayer);
 
@@ -80,18 +88,21 @@ void NpcController::update(float delta)
 	for (auto it = vpMoveableElems.begin(); it != vpMoveableElems.end();)
 	{
 		auto pMoveAbleElem = *it;
+		CC_SAFE_RETAIN(pMoveAbleElem);
 		auto obb = OBB(pMoveAbleElem->getCurSprite()->getAABB());
 		auto obbPlayer = OBB(_pPlayer->getCurSprite()->getAABB());
 
 		if (obb.intersects(obbPlayer))//有碰撞
 		{
-			//执行碰撞逻辑			 
-			pMoveAbleElem->hitOthers(_pPlayer);
-
-			CC_SAFE_RETAIN(pMoveAbleElem);
 			it = vpMoveableElems.erase(it);
-			MoveAbleElemManager::getInstance()->recycleElem(pMoveAbleElem);
-			CC_SAFE_RELEASE_NULL(pMoveAbleElem);
+			//执行碰撞逻辑			 
+			pMoveAbleElem->hitOthers(_pPlayer, [&pMoveAbleElem](){
+				CC_SAFE_RETAIN(pMoveAbleElem);
+				MoveAbleElemManager::getInstance()->recycleElem(pMoveAbleElem);
+				CC_SAFE_RELEASE_NULL(pMoveAbleElem);
+			});
+
+			
 			
 		}
 		//todo 300值在于我不知道如何获取模型的大小
@@ -108,6 +119,7 @@ void NpcController::update(float delta)
 		{
 			++it;
 		}
+		CC_SAFE_RELEASE_NULL(pMoveAbleElem);
 	}
 
 	randomGenElement(_pPlayer, _pGameLayer, delta);
@@ -232,6 +244,16 @@ cocos2d::Vec3 && NpcController::calcuratePosWillHit(MoveAbleElem * pElemSrc, Pla
 	
 }
 
+void NpcController::stopGame(void)
+{
+	Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+	for (auto it = vpMoveableElems.begin(); it != vpMoveableElems.end();++it)
+	{
+		auto pMoveAbleElem = *it;
+		cocos2d::Director::getInstance()->getScheduler()->unscheduleUpdate(pMoveAbleElem);
+	}
+	
+}
 
 #ifdef STD_VECTOR_ELEM
 #undef pushBack

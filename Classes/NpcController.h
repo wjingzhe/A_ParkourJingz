@@ -44,6 +44,8 @@ public:
 		}
 	}
 
+	void stopGame(void);
+
 protected:
 	SequenceInfo pumpSequence();
 
