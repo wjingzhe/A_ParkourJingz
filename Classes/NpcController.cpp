@@ -68,11 +68,11 @@ bool NpcController::init(Player * pPlayer, cocos2d::Layer * pGameLayer)
 
 	//todo
 	auto temp1 = MoveAbleElemManager::getInstance()->GenerateOneElem(OBSTACLE__ID);
-	_diffObstacleWithPlay = calcuratePosWillHit(temp1, pPlayer, _fRecationDt * 5);
+	_diffObstacleWithPlay = calcuratePosWillHit(temp1, pPlayer, _fRecationDt * 4);
 	MoveAbleElemManager::getInstance()->recycleElem(temp1);
 
 	auto temp2 = MoveAbleElemManager::getInstance()->GenerateOneElem(COIN_TYPE_ID);
-	_diffCoinWithPlay = calcuratePosWillHit(temp2, pPlayer, _fRecationDt * 5);
+	_diffCoinWithPlay = calcuratePosWillHit(temp2, pPlayer, _fRecationDt * 4);
 	MoveAbleElemManager::getInstance()->recycleElem(temp2);
 
 
