@@ -1,6 +1,8 @@
 #pragma once
 #include "cocos2d.h"
 #include "ui/UITextAtlas.h"
+#include "ui/UIButton.h"
+#include "ui/UIImageView.h"
 #include <string>
 
 class MainMenuLayer:public cocos2d::Layer
@@ -34,7 +36,9 @@ protected:
 private:
 	cocos2d::ui::TextAtlas * _pGoldText;
 	cocos2d::ui::Widget* _pRestartButton;
-	cocos2d::ui::Widget* _pPauseButton;
+	cocos2d::ui::Widget* _pPauseAndGold;
+	cocos2d::ui::Button * _pPauseButton;
+	cocos2d::ui::ImageView * _pGoldImage;
 	static long s_iCurrentGold;
 };
 

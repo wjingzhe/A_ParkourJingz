@@ -1,6 +1,5 @@
 #include "MainMenuLayer.h"
 #include "cocostudio/CocoStudio.h"
-#include "ui/UIButton.h"
 
 #include "RegitsteredEvents.h"
 
@@ -13,7 +12,7 @@ USING_NS_CC;
 
 long MainMenuLayer::s_iCurrentGold = 0;
 
-MainMenuLayer::MainMenuLayer() :_pRestartButton(nullptr), _pGoldText(nullptr), _pPauseButton(nullptr)
+MainMenuLayer::MainMenuLayer() :_pRestartButton(nullptr), _pGoldText(nullptr), _pPauseAndGold(nullptr), _pGoldImage(nullptr), _pPauseButton(nullptr)
 {
 }
 
@@ -21,6 +20,8 @@ MainMenuLayer::~MainMenuLayer()
 {
 	CC_SAFE_RELEASE_NULL(_pRestartButton);
 	CC_SAFE_RELEASE_NULL(_pGoldText);
+	CC_SAFE_RELEASE_NULL(_pPauseAndGold);
+	CC_SAFE_RELEASE_NULL(_pGoldImage);
 	CC_SAFE_RELEASE_NULL(_pPauseButton);
 }
 
@@ -34,23 +35,30 @@ bool MainMenuLayer::init()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	CC_SAFE_RELEASE_NULL(_pPauseButton);
+	CC_SAFE_RELEASE_NULL(_pPauseAndGold);
 	CC_SAFE_RELEASE_NULL(_pRestartButton);
 	CC_SAFE_RELEASE_NULL(_pGoldText);
+	CC_SAFE_RELEASE_NULL(_pGoldImage);
+	CC_SAFE_RELEASE_NULL(_pPauseButton);
 
-	_pPauseButton = cocostudio::GUIReader::getInstance()->widgetFromJsonFile("HUD/HUD.json");
-	_pGoldText = dynamic_cast<ui::TextAtlas *>(_pPauseButton->getChildByName("gold"));
-	_pGoldText->setString("0");
-	this->addChild(_pPauseButton, 100);
-	CC_SAFE_RETAIN(_pPauseButton);
+	_pPauseAndGold = cocostudio::GUIReader::getInstance()->widgetFromJsonFile("HUD/HUD.json");
+	this->addChild(_pPauseAndGold, 100);
+	CC_SAFE_RETAIN(_pPauseAndGold);
+
+	_pGoldText = dynamic_cast<ui::TextAtlas *>(_pPauseAndGold->getChildByName("gold"));
 	CC_SAFE_RETAIN(_pGoldText);
-
-
+	_pGoldText->setString("0");
 	_pGoldText->setPosition(Vec2(origin.x + visibleSize.width - _pGoldText->getContentSize().width,
 		origin.y + visibleSize.height - _pGoldText->getContentSize().height));
 
-	auto pauseButton = dynamic_cast<cocos2d::ui::Button *>(_pPauseButton->getChildByName("Button_1"));
-	pauseButton->addTouchEventListener(
+	_pGoldImage = dynamic_cast<ui::ImageView *>(_pPauseAndGold->getChildByName("Image_3"));
+	_pGoldImage->setPosition(Vec2(_pGoldText->getPositionX() - _pGoldImage->getContentSize().width,
+		_pGoldText->getPositionY()));
+	CC_SAFE_RETAIN(_pGoldImage);
+	
+	_pPauseButton = dynamic_cast<cocos2d::ui::Button *>(_pPauseAndGold->getChildByName("Button_1"));
+	CC_SAFE_RETAIN(_pPauseButton);
+	_pPauseButton->addTouchEventListener(
 		[&](Ref * sender,cocos2d::ui::Widget::TouchEventType type)
 		{
 			static bool bIsPaused = false;
@@ -71,8 +79,9 @@ bool MainMenuLayer::init()
 		}//lambdy
 	);
 
-	pauseButton->setPosition(Vec2(origin.x + pauseButton->getContentSize().width / 2,
-		origin.y + visibleSize.height - pauseButton->getContentSize().height / 2));
+	_pPauseButton->setPosition(Vec2(origin.x + _pPauseButton->getContentSize().width / 2,
+		origin.y + visibleSize.height - _pPauseButton->getContentSize().height / 2));
+	_pPauseButton->setVisible(true);
 
 	auto closeItem = MenuItemImage::create(
 		"CloseNormal.png",
@@ -152,8 +161,12 @@ void MainMenuLayer::ChangeGold(cocos2d::EventCustom * pEvent)
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
 	_pGoldText->setPosition(Vec2(origin.x + visibleSize.width - _pGoldText->getContentSize().width,
-		origin.y + visibleSize.height - _pGoldText->getContentSize().height));
+		_pGoldText->getPositionY()));
+
+	_pGoldImage->setPosition(Vec2(_pGoldText->getPositionX() - _pGoldImage->getContentSize().width,
+		_pGoldText->getPositionY()));
 
 	delete pIncreament;
 }
