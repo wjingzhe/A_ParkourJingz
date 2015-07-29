@@ -1,7 +1,7 @@
 #pragma once
 #include "cocos2d.h"
 #include "ui/UITextAtlas.h"
-
+#include <string>
 
 class MainMenuLayer:public cocos2d::Layer
 {
@@ -31,9 +31,7 @@ protected:
 	{
 		int * pIncreament = static_cast<int *>(pEvent->getUserData());		
 		s_iCurrentGold += *pIncreament;
-		char str[20];
-		sprintf_s(str, "%ld", s_iCurrentGold);
-		_pGoldText->setString(str);
+		_pGoldText->setString(cocos2d::StringUtils::format("%ld", s_iCurrentGold));
 		delete pIncreament;
 	}
 
