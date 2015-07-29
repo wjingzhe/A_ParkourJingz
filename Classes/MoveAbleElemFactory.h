@@ -37,33 +37,12 @@ class MoveAbleElemFactory :public MoveAbleElemBaseFactory
 protected:
 	MoveAbleElemFactory()
 	{
-		_pPreGenElem.clear();
-		auto & _lock = s_lock;
-		auto & _pPreGenElem = this->_vReadyElem;
-		//新起线程去完成加载，用锁来控制唯一性
-		_theadPreload = std::thread(
-			[&_lock, &_pPreGenElem]()->int
-		{
-			while (_lock.test_and_set(std::memory_order_acquire))
-			{
-				//尝试取锁
-			}
-			ADD_MOVEABLE_ELEM(_pPreGenElem, PRE_CREATE_BASE);
-			_lock.clear();
-			//解锁
-			return 0;
-		}
-		);
-		_theadPreload.detach();
+		ADD_MOVEABLE_ELEM(_vReadyElem, PRE_CREATE_BASE);
 	}
 public:
 	
 	virtual ~MoveAbleElemFactory()
 	{
-		if (_theadPreload.joinable())
-		{
-			_theadPreload.join();
-		}
 	}
 
 	bool init() override
@@ -90,34 +69,6 @@ public:
 
 	virtual T_Ptr getMoveAbleElem()
 	{
-		try
-		{
-			if (_theadPreload.joinable())
-			{
-				_theadPreload.join();
-			}
-		}
-		catch (const std::exception &e)
-		{
-			std::cout << "Exception: " << e.what() << std::endl;
-		}
-		
-
-		if (!_pPreGenElem.empty())
-		{
-			while (s_lock.test_and_set(std::memory_order_acquire))
-			{
-				//尝试取锁
-			}
-
-			for (auto it = _pPreGenElem.begin(); it != _pPreGenElem.end(); ++it)
-			{
-				_vReadyElem.pushBack(*it);
-			}
-			_pPreGenElem.clear();
-			s_lock.clear();
-		}
-
 		if (_vReadyElem.size() <= 0)
 		{
 			ADD_MOVEABLE_ELEM(_vReadyElem, INCREASEMENT);
@@ -173,9 +124,8 @@ public:
 
 	
 protected:
-
-private:
 	std::thread _theadPreload;
+private:
 };
 
 #ifdef STD_VECTOR_ELEM
