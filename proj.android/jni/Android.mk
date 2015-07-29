@@ -12,9 +12,26 @@ LOCAL_MODULE_FILENAME := libcocos2dcpp
 
 LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/AppDelegate.cpp \
-                   ../../Classes/HelloWorldScene.cpp
+                   ../../Classes/BackgroundLayer.cpp \
+				   ../../Classes/Coin.cpp \
+				   ../../Classes/ElemsPreloadManager.cpp \
+				   ../../Classes/GameLayer.cpp \
+				   ../../Classes/GameMainController.cpp \
+				   ../../Classes/MainMenuLayer.cpp \
+				   ../../Classes/MainScene.cpp \
+				   ../../Classes/MapSceneController.cpp \
+				   ../../Classes/MapSequences.cpp \
+				   ../../Classes/MoveAbleElemManager.cpp \
+				   ../../Classes/MoveableElems.cpp \
+				   ../../Classes/NpcController.cpp \
+				   ../../Classes/Obstacle.cpp \
+				   ../../Classes/Player.cpp \
+				   ../../Classes/PlayerController.cpp \
+				   ../../Classes/RegitsteredEvents.cpp \
+				   ../../Classes/RuningController.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../
 
 # _COCOS_HEADER_ANDROID_BEGIN
 # _COCOS_HEADER_ANDROID_END
