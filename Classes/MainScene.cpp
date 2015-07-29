@@ -30,7 +30,13 @@ bool MainScene::init()
 
 	auto glView = Director::getInstance()->getOpenGLView();
 
-	Size designSize = Size(960, 640);
+	Size designSize = Size(960, 540);
+	auto screanRatio = glView->getFrameSize().width / glView->getFrameSize().height;
+	auto ratio_16_9 = 16.0f / 9.0f;
+	if (screanRatio < ratio_16_9)
+	{
+		designSize = Size(960, 640);
+	}
 
 	glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
 
@@ -46,7 +52,7 @@ bool MainScene::init()
 	cameraMainUI->setDepth(5);
 	
 
-	auto camera3D = Camera::createPerspective(35, GLfloat(designSize.width) / GLfloat(designSize.height), 1, 1000);
+	auto camera3D = Camera::createPerspective(35, GLfloat(designSize.width) / GLfloat(designSize.height), 1, 800);
 	camera3D->setCameraFlag(CameraFlag::DEFAULT);
 	camera3D->setPosition3D(Vec3(0, 15, 10));
 	camera3D->lookAt(Vec3(0, 5, -60), Vec3(0, 1, 0));
