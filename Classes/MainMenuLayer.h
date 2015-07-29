@@ -27,13 +27,7 @@ public:
 
 protected:
 
-	void ChangeGold(cocos2d::EventCustom * pEvent)
-	{
-		int * pIncreament = static_cast<int *>(pEvent->getUserData());		
-		s_iCurrentGold += *pIncreament;
-		_pGoldText->setString(cocos2d::StringUtils::format("%ld", s_iCurrentGold));
-		delete pIncreament;
-	}
+	void ChangeGold(cocos2d::EventCustom * pEvent);
 
 	void showRestart(cocos2d::EventCustom * pEvent);
 

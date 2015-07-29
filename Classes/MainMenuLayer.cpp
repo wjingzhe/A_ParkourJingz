@@ -31,6 +31,9 @@ bool MainMenuLayer::init()
 		return false;
 	}
 
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
 	CC_SAFE_RELEASE_NULL(_pPauseButton);
 	CC_SAFE_RELEASE_NULL(_pRestartButton);
 	CC_SAFE_RELEASE_NULL(_pGoldText);
@@ -41,6 +44,10 @@ bool MainMenuLayer::init()
 	this->addChild(_pPauseButton, 100);
 	CC_SAFE_RETAIN(_pPauseButton);
 	CC_SAFE_RETAIN(_pGoldText);
+
+
+	_pGoldText->setPosition(Vec2(origin.x + visibleSize.width - _pGoldText->getContentSize().width,
+		origin.y + visibleSize.height - _pGoldText->getContentSize().height));
 
 	auto pauseButton = dynamic_cast<cocos2d::ui::Button *>(_pPauseButton->getChildByName("Button_1"));
 	pauseButton->addTouchEventListener(
@@ -64,8 +71,8 @@ bool MainMenuLayer::init()
 		}//lambdy
 	);
 
-	Size visibleSize = Director::getInstance()->getVisibleSize();
-	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	pauseButton->setPosition(Vec2(origin.x + pauseButton->getContentSize().width / 2,
+		origin.y + visibleSize.height - pauseButton->getContentSize().height / 2));
 
 	auto closeItem = MenuItemImage::create(
 		"CloseNormal.png",
@@ -135,4 +142,18 @@ void MainMenuLayer::showRestart(cocos2d::EventCustom * pEvent)
 	_pPauseButton->setVisible(false);
 	_pRestartButton->setVisible(true);
 	
+}
+
+void MainMenuLayer::ChangeGold(cocos2d::EventCustom * pEvent)
+{
+	int * pIncreament = static_cast<int *>(pEvent->getUserData());
+	s_iCurrentGold += *pIncreament;
+	_pGoldText->setString(cocos2d::StringUtils::format("%ld", s_iCurrentGold));
+
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	_pGoldText->setPosition(Vec2(origin.x + visibleSize.width - _pGoldText->getContentSize().width,
+		origin.y + visibleSize.height - _pGoldText->getContentSize().height));
+
+	delete pIncreament;
 }
