@@ -105,13 +105,12 @@ void MoveAbleElemManager::registerElemAndFactory(unsigned int iTypeId, FactoryCr
 
 MoveAbleElemBaseFactory * MoveAbleElemManager::getElemFactory(unsigned int iTypeId)
 {
-	for each (auto it in _mElemFactories)
+	for (auto it = _mElemFactories.begin(); it != _mElemFactories.end(); ++it)
 	{
-		if (it.first == iTypeId)
+		if (it->first == iTypeId)
 		{
-			return it.second;
+			return it->second;
 		}
-
 	}
 	return nullptr;
 }

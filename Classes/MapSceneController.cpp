@@ -98,16 +98,17 @@ void MapSceneController::linkRoads(void)
 
 	auto index = _vpRoadSprites.size();
 
-	for each (auto pSprite in _vpRoadSprites)
+	for (auto it = _vpRoadSprites.begin(); it < _vpRoadSprites.end(); ++it)
 	{
-		auto pos = pSprite->getAABB().getCenter();
+		auto pos = (*it)->getAABB().getCenter();
 		pos.set(pos.x, pos.y, pPlayer->getCurSprite()->getPositionZ());
-		if (pSprite->getAABB().containPoint(pos))
+		if ((*it)->getAABB().containPoint(pos))
 		{
-			index = _vpRoadSprites.getIndex(pSprite);
+			index = _vpRoadSprites.getIndex((*it));
 			break;
 		}
 	}
+
 	
 	if (index >= _vpRoadSprites.size()/2)
 	{
@@ -141,12 +142,10 @@ void MapSceneController::update(float delta)
 
 void MapSceneController::moveScene(const Vec3 &pos)
 {
-
-	for each (auto pSprite in _vpRoadSprites)
+	for (auto it = _vpRoadSprites.begin(); it != _vpRoadSprites.end(); ++it)
 	{
-		pSprite->setPosition3D(pSprite->getPosition3D() + pos);
+		(*it)->setPosition3D((*it)->getPosition3D() + pos);
 	}
-	
 }
 
 void MapSceneController::beganMoveScene(void)

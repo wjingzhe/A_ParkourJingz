@@ -154,11 +154,13 @@ void PlayerController::update(float delta)
 
 		auto temp = _pPlayer->getCurSprite()->getCameraMask();
 
-		for each (auto pCamera in _pPlayer->getCurSprite()->getScene()->getCameras())
+		auto tempCameras = _pPlayer->getCurSprite()->getScene()->getCameras();
+
+		for (auto it = tempCameras.begin(); it != tempCameras.end(); ++it)
 		{
-			if ((static_cast<unsigned short>(pCamera->getCameraFlag()) & temp) != 0)
+			if ((static_cast<unsigned short>((*it)->getCameraFlag()) & temp) != 0)
 			{
-				pCamera->setPosition3D(pCamera->getPosition3D() + moveStep);
+				(*it)->setPosition3D((*it)->getPosition3D() + moveStep);
 			}
 		}
 

@@ -34,9 +34,9 @@ NpcController::~NpcController()
 		_pCurMapSequences = nullptr;
 	}
 
-	for each (auto ptr in _vSequencesPtr)
+	for (auto it = _vSequencesPtr.begin(); it != _vSequencesPtr.end(); ++it)
 	{
-		delete ptr;
+		delete (*it);
 	}
 	_vSequencesPtr.clear();
 
