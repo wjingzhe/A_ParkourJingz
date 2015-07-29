@@ -28,21 +28,25 @@ bool MainScene::init()
 
 	ElemsPreloadManager::registerMoveAbleElemTypes();
 
-	Size winSize = Director::getInstance()->getWinSize();
+	auto glView = Director::getInstance()->getOpenGLView();
 
-	auto cameraBackground2D = Camera::createOrthographic(winSize.width, winSize.height, 0, 100);
+	Size designSize = Size(960, 640);
+
+	glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
+
+	auto cameraBackground2D = Camera::createOrthographic(designSize.width, designSize.height, 0, 100);
 	cameraBackground2D->setCameraFlag(CameraFlag::USER2);
 	this->addChild(cameraBackground2D);
 	cameraBackground2D->setDepth(-5);
 
 	//todo 操作相机的添加顺序或排列方式才行
-	auto cameraMainUI = Camera::createOrthographic(winSize.width, winSize.height, 0, 100);
+	auto cameraMainUI = Camera::createOrthographic(designSize.width, designSize.height, 0, 100);
 	cameraMainUI->setCameraFlag(CameraFlag::USER4);
 	this->addChild(cameraMainUI);
 	cameraMainUI->setDepth(5);
 	
 
-	auto camera3D = Camera::createPerspective(35, GLfloat(winSize.width) / GLfloat(winSize.height), 1, 1000);
+	auto camera3D = Camera::createPerspective(35, GLfloat(designSize.width) / GLfloat(designSize.height), 1, 1000);
 	camera3D->setCameraFlag(CameraFlag::DEFAULT);
 	camera3D->setPosition3D(Vec3(0, 15, 10));
 	camera3D->lookAt(Vec3(0, 5, -60), Vec3(0, 1, 0));
