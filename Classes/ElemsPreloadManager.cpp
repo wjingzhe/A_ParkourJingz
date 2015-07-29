@@ -35,6 +35,6 @@ void ElemsPreloadManager::preCreateMoveAbleElems(void)
 	{
 		ElemsPreloadManager::registerMoveAbleElemTypes();
 	}
-	MoveAbleElemManager::getInstance()->GenerateOneElem(OBSTACLE__ID);
-	MoveAbleElemManager::getInstance()->GenerateOneElem(COIN_TYPE_ID);
+	MoveAbleElemManager::getInstance()->GenerateOneElem(OBSTACLE__ID)->recycleSelf();
+	MoveAbleElemManager::getInstance()->GenerateOneElem(COIN_TYPE_ID)->recycleSelf();
 }
