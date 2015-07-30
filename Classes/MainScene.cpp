@@ -38,7 +38,7 @@ bool MainScene::init()
 		designSize = Size(960, 640);
 	}
 
-	glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
+	glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
 
 	auto cameraBackground2D = Camera::createOrthographic(designSize.width, designSize.height, 0, 100);
 	cameraBackground2D->setCameraFlag(CameraFlag::USER2);
