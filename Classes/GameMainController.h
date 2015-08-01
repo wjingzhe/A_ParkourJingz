@@ -20,12 +20,12 @@ public:
 	
 	~GameMainController();
 
-	bool init(Player * pPlayer, cocos2d::Layer * pGameLayer);
+	bool init(Player * pPlayer, cocos2d::Layer * pGameLayer, cocos2d::Layer * pMainMenuLayer);
 
-	static GameMainController* create(Player * pPlayer, cocos2d::Layer * pGameLayer)
+	static GameMainController* create(Player * pPlayer, cocos2d::Layer * pGameLayer, cocos2d::Layer * pMainMenuLayer)
 	{
 		GameMainController *pRet = new(std::nothrow) GameMainController();
-		if (pRet && pRet->init(pPlayer, pGameLayer))
+		if (pRet && pRet->init(pPlayer, pGameLayer,pMainMenuLayer))
 		{
 			pRet->autorelease();
 			return pRet;
@@ -38,10 +38,10 @@ public:
 		}
 	}
 
-	bool onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * event);
-	void onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * event);
-
-	void onAfterDraw(cocos2d::EventCustom * pEvent);
+	void onStop(cocos2d::EventCustom * pEvent);
+	void onStart(cocos2d::EventCustom * pEvent);
+	void onRestart(cocos2d::EventCustom * pEvent);
+	void onShowRestart(cocos2d::EventCustom * pEvent);
 
 	enum MOVE_MODE
 	{
@@ -53,8 +53,6 @@ public:
 
 	void setMoveMode(MOVE_MODE mode);
 
-	void stopGame(void);
-
 private:
 	MapSceneController * _pMapSceneController;
 	PlayerController * _pPlayerController;
@@ -62,6 +60,12 @@ private:
 
 
 	cocos2d::Layer * _pGameLayer;
-	cocos2d::EventListenerCustom * _pEventListenerAfterDraw;
+	cocos2d::Layer * _pMainMenuLayer;
+
+	cocos2d::EventListenerCustom * _pEventListenerStopGame;
+	cocos2d::EventListenerCustom * _pEventListenerStartGame;
+	cocos2d::EventListenerCustom * _pEventListenerRestartGame;
+	cocos2d::EventListenerCustom * _pEventListenerShowRestartButton;
+
 	MOVE_MODE _eMode;
 };

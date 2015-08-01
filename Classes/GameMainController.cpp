@@ -3,22 +3,44 @@
 #include "MapSceneController.h"
 #include "PlayerController.h"
 #include "NpcController.h"
+#include "RegitsteredEvents.h"
+#include "MainScene.h"
+#include "MainMenuLayer.h"
 
 USING_NS_CC;
 
 GameMainController::GameMainController() 
 	:_pMapSceneController(nullptr), _pPlayerController(nullptr), _pNpcController(nullptr)
-	, _pGameLayer(nullptr), _pEventListenerAfterDraw(nullptr)
-	, _eMode(MOVE_MODE::PLAYER)
+	, _pGameLayer(nullptr), _pMainMenuLayer(nullptr)
+	, _pEventListenerStopGame(nullptr), _pEventListenerStartGame(nullptr), _pEventListenerRestartGame(nullptr), _pEventListenerShowRestartButton(nullptr)
+	, _eMode(MOVE_MODE::NONE)
 {
 }
 
 GameMainController::~GameMainController()
 {
-	if (_pEventListenerAfterDraw)
+	if (_pEventListenerStopGame)
 	{
-		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerAfterDraw);
-		CC_SAFE_RELEASE_NULL(_pEventListenerAfterDraw);
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerStopGame);
+		CC_SAFE_RELEASE_NULL(_pEventListenerStopGame);
+	}
+
+	if (_pEventListenerStartGame)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerStartGame);
+		CC_SAFE_RELEASE_NULL(_pEventListenerStartGame);
+	}
+
+	if (_pEventListenerRestartGame)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerRestartGame);
+		CC_SAFE_RELEASE_NULL(_pEventListenerRestartGame);
+	}
+
+	if (_pEventListenerShowRestartButton)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerShowRestartButton);
+		CC_SAFE_RELEASE_NULL(_pEventListenerShowRestartButton);
 	}
 
 	CC_SAFE_RELEASE_NULL(_pPlayerController);
@@ -26,14 +48,18 @@ GameMainController::~GameMainController()
 	CC_SAFE_RELEASE_NULL(_pNpcController);
 
 	CC_SAFE_RELEASE_NULL(_pGameLayer);
-
+	CC_SAFE_RELEASE_NULL(_pMainMenuLayer);
 }
 
-bool GameMainController::init(Player * pPlayer,Layer * pGameLayer)
+bool GameMainController::init(Player * pPlayer, Layer * pGameLayer, Layer * pMainMenuLayer)
 {
 	CC_SAFE_RETAIN(pGameLayer);
 	CC_SAFE_RELEASE(_pGameLayer);
 	_pGameLayer = pGameLayer;
+
+	CC_SAFE_RETAIN(pMainMenuLayer);
+	CC_SAFE_RELEASE(_pMainMenuLayer);
+	_pMainMenuLayer = pMainMenuLayer;
 
 	CC_SAFE_RETAIN(pPlayer);
 
@@ -53,34 +79,92 @@ bool GameMainController::init(Player * pPlayer,Layer * pGameLayer)
 	CC_SAFE_RELEASE_NULL(pPlayer);
 	
 
-	CC_SAFE_RELEASE_NULL(_pEventListenerAfterDraw);
-
-	_pEventListenerAfterDraw = Director::getInstance()->getEventDispatcher()->addCustomEventListener
+	CC_SAFE_RELEASE_NULL(_pEventListenerStartGame);
+	_pEventListenerStartGame = Director::getInstance()->getEventDispatcher()->addCustomEventListener
 		(
-		Director::EVENT_AFTER_DRAW, 
-		std::bind(&GameMainController::onAfterDraw, this, std::placeholders::_1)
+		RegitsteredEvents::GAME_START,
+		std::bind(&GameMainController::onStart, this, std::placeholders::_1)
 		);
-	CC_SAFE_RETAIN(_pEventListenerAfterDraw);
+	CC_SAFE_RETAIN(_pEventListenerStartGame);
+
 
 	return true;
 }
 
-
-
-bool GameMainController::onTouchBegan(Touch *touch, Event *unused_event)
+void GameMainController::onStop(cocos2d::EventCustom * pEvent)
 {
-	_pPlayerController->reveiveTouchBegin(touch->getLocation(), _pGameLayer);
-	return true;
+	if (_pEventListenerStopGame)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerStopGame);
+		CC_SAFE_RELEASE_NULL(_pEventListenerStopGame);
+	}
+
+	if (_pEventListenerStartGame)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerStartGame);
+		CC_SAFE_RELEASE_NULL(_pEventListenerStartGame);
+	}
+
+	if (_pEventListenerShowRestartButton)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerShowRestartButton);
+		CC_SAFE_RELEASE_NULL(_pEventListenerShowRestartButton);
+	}
+
+
+	_pPlayerController->stopGame();
+	_pMapSceneController->stopGame();
+	_pNpcController->stopGame();
+
+	
+}
+void GameMainController::onShowRestart(cocos2d::EventCustom * pEvent)
+{
+	static_cast<MainMenuLayer *> (_pMainMenuLayer)->showRestart();
 }
 
-void GameMainController::onTouchEnded(Touch *touch, Event *unused_event)
+
+void GameMainController::onStart(cocos2d::EventCustom * pEvent)
 {
-	_pPlayerController->reveiveTouchEnd(touch->getLocation(), _pGameLayer);
+	if (_pEventListenerStartGame)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerStartGame);
+		CC_SAFE_RELEASE_NULL(_pEventListenerStartGame);
+	}
+
+	CC_SAFE_RELEASE_NULL(_pEventListenerStopGame);
+	_pEventListenerStopGame = Director::getInstance()->getEventDispatcher()->addCustomEventListener
+		(
+		RegitsteredEvents::GAME_OVER,
+		std::bind(&GameMainController::onStop, this, std::placeholders::_1)
+		);
+	CC_SAFE_RETAIN(_pEventListenerStopGame);
+
+	CC_SAFE_RELEASE_NULL(_pEventListenerRestartGame);
+	_pEventListenerRestartGame = Director::getInstance()->getEventDispatcher()->addCustomEventListener
+		(
+		RegitsteredEvents::GAME_RESTART,
+		std::bind(&GameMainController::onRestart, this, std::placeholders::_1)
+		);
+	CC_SAFE_RETAIN(_pEventListenerRestartGame);
+
+	CC_SAFE_RELEASE_NULL(_pEventListenerShowRestartButton);
+	_pEventListenerShowRestartButton = Director::getInstance()->getEventDispatcher()->addCustomEventListener
+		(
+		RegitsteredEvents::SHOW_RESTART,
+		std::bind(&GameMainController::onShowRestart, this, std::placeholders::_1)
+		);
+	CC_SAFE_RETAIN(_pEventListenerShowRestartButton);
+
+	_pMapSceneController->startGame();
+	_pPlayerController->startGame();
+	_pNpcController->startGame();
+	setMoveMode(GameMainController::PLAYER);
 }
 
-void GameMainController::onAfterDraw(cocos2d::EventCustom * pEvent)
+void GameMainController::onRestart(cocos2d::EventCustom * pEvent)
 {
-
+	Director::getInstance()->replaceScene(MainScene::create());
 }
 
 void GameMainController::setMoveMode(MOVE_MODE mode)
@@ -110,18 +194,4 @@ void GameMainController::setMoveMode(MOVE_MODE mode)
 	default:
 		break;
 	}
-}
-void GameMainController::stopGame(void)
-{
-	if (_pEventListenerAfterDraw)
-	{
-		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerAfterDraw);
-		CC_SAFE_RELEASE_NULL(_pEventListenerAfterDraw);
-	}
-	_pPlayerController->stopGame();
-	_pMapSceneController->stopGame();
-	_pNpcController->stopGame();
-
-	
-	
 }
