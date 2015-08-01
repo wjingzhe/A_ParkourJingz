@@ -4,15 +4,17 @@
 #include "GameLayer.h"
 USING_NS_CC;
 #include "ElemsPreloadManager.h"
+#include "GameMainController.h"
 
 MainScene::MainScene() 
-	:_pSelfCamera(nullptr)
+	:_pSelfCamera(nullptr), _pGameMainController(nullptr)
 {
 }
 
 MainScene::~MainScene()	
 {
 	CC_SAFE_RELEASE_NULL(_pSelfCamera);
+	CC_SAFE_RELEASE_NULL(_pGameMainController);
 }
 
 
@@ -83,9 +85,11 @@ bool MainScene::init()
 
 	pMenuLayer->setCameraMask(static_cast<unsigned short>(CameraFlag::USER4));
 
-
+	CC_SAFE_RELEASE_NULL(_pGameMainController);
+	_pGameMainController = GameMainController::create(pGameLayer->getPlayer(), pGameLayer, pMenuLayer);
+	CC_SAFE_RETAIN(_pGameMainController);
 	//scheduleUpdate();
-
+	_pGameMainController->onStart(nullptr);
     return true;
 }
 
