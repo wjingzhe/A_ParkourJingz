@@ -2,8 +2,13 @@
 #include "cocos2d.h"
 #include "MoveAbleElem.h"
 
-//速度应该作为玩家、金币、怪物的属性，摄像机只做跟随操作
 
+#define ELEM_STATUS_FREE_STYLE (0)
+#define ELEM_STATUS_SPORTING (1)
+#define ELEM_STATUS_KEEP_STANDING (1<<1 | ELEM_STATUS_FREE_STYLE)
+#define ELEM_STATUS_MOVING (1<<2 | ELEM_STATUS_SPORTING)
+#define ELEM_STATUS_JUMPING (1<<3 | ELEM_STATUS_SPORTING)
+#define ELEM_STATUS_TURNING (1<<4 | ELEM_STATUS_SPORTING)
 
 #ifdef STD_VECTOR_ELEM
 class Player :public MoveAbleElem, public cocos2d::Ref
@@ -54,8 +59,22 @@ public:
 		init();
 	}
 
+	unsigned int getSportStatus(void)
+	{
+		return _uSportStatus;
+	}
+
+	void setSportStatus(unsigned int newStatus)
+	{
+		_uSportStatus = newStatus;
+	}
+
 	virtual void beHitted(MoveAbleElem * pMoveAbleElem);
 	
+	//被使用状态启动计时器更新自身状态
+	virtual void setUsed(void);
+
 private:
+	unsigned int _uSportStatus;
 };
 
