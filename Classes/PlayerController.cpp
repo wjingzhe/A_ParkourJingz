@@ -11,7 +11,7 @@ USING_NS_CC;
 PlayerController::PlayerController(Player * player) 
 	:_pPlayer(nullptr)
 	, _fStepLength(1.0f), _fElapsed(0.0f), _fPerTime(1/60.0f)
-	, _bMovePlayerMode(true)
+	, _bMovePlayerMode(false), _pTouchListenerOneByOne(nullptr)
 {
 	this->_pPlayer = player;
 	CC_SAFE_RETAIN(this->_pPlayer);
@@ -21,6 +21,12 @@ PlayerController::PlayerController(Player * player)
 
 PlayerController::~PlayerController()
 {
+	if (_pTouchListenerOneByOne != nullptr)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pTouchListenerOneByOne);
+		CC_SAFE_RELEASE_NULL(_pTouchListenerOneByOne);
+	}
+
 	Director::getInstance()->getScheduler()->unscheduleUpdate(this);
 	CC_SAFE_RELEASE_NULL(this->_pPlayer);
 }
@@ -45,18 +51,18 @@ PlayerController * PlayerController::create(Player * player)
 
 bool PlayerController::init()
 {
-	Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
 	return true; 
 }
 
-void PlayerController::reveiveTouchBegin(Vec2 pos, Node * pRenderNode)
+bool PlayerController::onTouchBegan(Touch *touch, Event *unused_event)
 {
-	this->_touchBeginPos = std::move(pos);
+	this->_touchBeginPos = std::move(touch->getLocation());
+	return true;
 }
 
-void PlayerController::reveiveTouchEnd(Vec2 pos, Node * pRenderNode)
+void PlayerController::onTouchEnded(Touch *touch, Event *unused_event)
 {
-	this->_touchEndPos = std::move(pos);
+	this->_touchEndPos = std::move(touch->getLocation());
 
 	Vec2 diff = _touchEndPos - _touchBeginPos;
 
@@ -68,33 +74,36 @@ void PlayerController::reveiveTouchEnd(Vec2 pos, Node * pRenderNode)
 
 	//转向动作抖动阀值，偏移绝对量大于阀值才认定为有效的左右移动
 	const float Threshold = std::sqrt(2) / 2;//假如刚好移动方向和水平方位处于45度角（-135°）时，点乘值为sqrt(2)/2，即平行四边形的面积
-
+	auto player = _pPlayer;
+	auto sportStatus = _pPlayer->getSportStatus();
 	if (std::abs(result) > Threshold)
 	{
 		if (result > 0) // right
 		{
 			//可以移动 且 不是正执行左右移动操作 Gets an action from the running action list by its tag.
 			if (_pPlayer->getCurSprite()->getPositionX() <= MIDDLE_LINE_POS_X
-				&& !_pPlayer->getCurSprite()->getActionByTag(TURN_LEFT)
-				&& !_pPlayer->getCurSprite()->getActionByTag(TURN_RIGHT)
-				)
+				&& (sportStatus & ELEM_STATUS_TURNING) != ELEM_STATUS_TURNING)
 			{
 				auto action = MoveBy::create(0.2f, Vec3(10.0f, 0, 0));
+				auto callback = CCCallFunc::create([sportStatus, player]() mutable {player->setSportStatus(sportStatus); });
+				auto pActionSeq = cocos2d::Sequence::createWithTwoActions(action, callback);
 				action->setTag(TURN_RIGHT);
-				this->_pPlayer->getCurSprite()->runAction(action);
+				this->_pPlayer->getCurSprite()->runAction(pActionSeq);
+				_pPlayer->setSportStatus(sportStatus | ELEM_STATUS_TURNING);
 			}
 		}
 		else //left
 		{
 			//可以移动 且 不是正执行左右移动操作 Gets an action from the running action list by its tag.
 			if (_pPlayer->getCurSprite()->getPositionX() >= MIDDLE_LINE_POS_X
-				&& !_pPlayer->getCurSprite()->getActionByTag(TURN_LEFT)
-				&& !_pPlayer->getCurSprite()->getActionByTag(TURN_RIGHT)
-				)
+				&& (sportStatus & ELEM_STATUS_TURNING) != ELEM_STATUS_TURNING)
 			{
 				auto action = MoveBy::create(0.2f, Vec3(-10.0f, 0, 0));
+				auto callback = CCCallFunc::create([sportStatus, player]() mutable {player->setSportStatus(sportStatus); });
+				auto pActionSeq = cocos2d::Sequence::createWithTwoActions(action, callback);
 				action->setTag(TURN_LEFT);
-				this->_pPlayer->getCurSprite()->runAction(action);
+				this->_pPlayer->getCurSprite()->runAction(pActionSeq);
+				_pPlayer->setSportStatus(sportStatus | ELEM_STATUS_TURNING);
 			}
 		}
 	}
@@ -125,7 +134,17 @@ void PlayerController::reveiveTouchEnd(Vec2 pos, Node * pRenderNode)
 
 		if (diff.y > 0)
 		{
-			//MOVE_FORWARD(-5);
+			//可以跳跃
+			if ((sportStatus & ELEM_STATUS_JUMPING) != ELEM_STATUS_JUMPING)
+			{
+				auto action = JumpBy::create(0.7f, Vec2(0.0f,0.0f),15.0f,1);
+				auto callback = CCCallFunc::create([sportStatus, player]() mutable {player->setSportStatus(sportStatus); });
+				auto pActionSeq = cocos2d::Sequence::createWithTwoActions(action, callback);
+				action->setTag(TURN_LEFT);
+				this->_pPlayer->getCurSprite()->runAction(pActionSeq);
+				_pPlayer->setSportStatus(sportStatus | ELEM_STATUS_JUMPING);
+			}
+
 		}
 		else
 		{
@@ -150,7 +169,6 @@ void PlayerController::update(float delta)
 	if (_bMovePlayerMode)
 	{
 		auto moveStep = _pPlayer->getMoveDirNormal() * _pPlayer->getMoveSpeed() * delta;
-		_pPlayer->getCurSprite()->setPosition3D(_pPlayer->getCurSprite()->getPosition3D() + moveStep);
 
 		auto temp = _pPlayer->getCurSprite()->getCameraMask();
 
@@ -170,5 +188,32 @@ void PlayerController::update(float delta)
 
 void PlayerController::stopGame(void)
 {
-	Director::getInstance()->getScheduler()->unscheduleAllForTarget(this);
+	Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+	if (_pTouchListenerOneByOne != nullptr)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pTouchListenerOneByOne);
+		CC_SAFE_RELEASE_NULL(_pTouchListenerOneByOne);
+	}
+	_pPlayer->recycleSelf();
+}
+
+void PlayerController::startGame(void)
+{
+	if (_pTouchListenerOneByOne != nullptr)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pTouchListenerOneByOne);
+		CC_SAFE_RELEASE_NULL(_pTouchListenerOneByOne);
+	}
+
+	_pTouchListenerOneByOne = EventListenerTouchOneByOne::create();
+	CC_SAFE_RETAIN(_pTouchListenerOneByOne);
+
+	_pTouchListenerOneByOne->setSwallowTouches(true);
+	_pTouchListenerOneByOne->onTouchBegan = CC_CALLBACK_2(PlayerController::onTouchBegan, this);
+	_pTouchListenerOneByOne->onTouchEnded = std::bind(&PlayerController::onTouchEnded, this, std::placeholders::_1, std::placeholders::_2);//实际使用当然是cocos封装的接口方便，但是要熟悉C++11就必须多使用
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_pTouchListenerOneByOne, 1);
+
+	_pPlayer->setUsed();
+
+	Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
 }
