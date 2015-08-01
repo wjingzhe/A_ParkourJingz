@@ -75,9 +75,6 @@ bool NpcController::init(Player * pPlayer, cocos2d::Layer * pGameLayer)
 	_diffCoinWithPlay = calcuratePosWillHit(temp2, pPlayer, _fRecationDt * 4);
 	MoveAbleElemManager::getInstance()->recycleElem(temp2);
 
-
-	Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
-
 	return true;
 }
 
@@ -185,7 +182,7 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 			else \
 			{\
 				temp->getCurSprite()->setPosition3D( \
-					 Vec3(POS_X, pPlayer->getCurSprite()->getPositionY() + _diffObstacleWithPlay.y, pPlayer->getCurSprite()->getPositionZ() + _diffObstacleWithPlay.z)); \
+					 Vec3(POS_X, 0 + _diffObstacleWithPlay.y, pPlayer->getCurSprite()->getPositionZ() + _diffObstacleWithPlay.z)); \
 			}\
 		}\
 		break;\
@@ -196,7 +193,7 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 			vpMoveableElems.pushBack(temp);\
 			pRenderNode->addChild(temp->getCurSprite()); \
 			temp->getCurSprite()->setPosition3D( \
-					 Vec3(POS_X, pPlayer->getCurSprite()->getPositionY() + _diffObstacleWithPlay.y, pPlayer->getCurSprite()->getPositionZ() + _diffObstacleWithPlay.z));  \
+					 Vec3(POS_X, 0 + _diffObstacleWithPlay.y, pPlayer->getCurSprite()->getPositionZ() + _diffObstacleWithPlay.z));  \
 			temp->getCurSprite()->setRotation3D(Vec3(90.0f, 0.0f, 180.0f));\
 		}\
 		break;\
@@ -254,6 +251,11 @@ void NpcController::stopGame(void)
 		pMoveAbleElem->getCurSprite()->pause();
 	}
 	
+}
+
+void NpcController::startGame(void)
+{
+	Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
 }
 
 #ifdef STD_VECTOR_ELEM

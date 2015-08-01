@@ -46,6 +46,8 @@ public:
 
 	void stopGame(void);
 
+	void startGame(void);
+
 protected:
 	SequenceInfo pumpSequence();
 
