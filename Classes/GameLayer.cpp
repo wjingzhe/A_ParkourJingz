@@ -1,39 +1,27 @@
 #include "GameLayer.h"
 #include "Player.h"
 
-#include "MapSequences.h"
-
-#include "GameMainController.h"
-
 USING_NS_CC;
 
 GameLayer::GameLayer() 
-	:_pPlayer(nullptr), _pTouchListenerOneByOne(nullptr), _pGameMainController(nullptr)
+	:_pPlayer(nullptr)
 {
 }
 
 GameLayer::~GameLayer()
 {
-	if (_pTouchListenerOneByOne != nullptr)
-	{
-		this->getEventDispatcher()->removeEventListener(_pTouchListenerOneByOne);
-		CC_SAFE_RELEASE_NULL(_pTouchListenerOneByOne);
-	}
 	CC_SAFE_RELEASE_NULL(_pPlayer);
-	CC_SAFE_RELEASE_NULL(_pGameMainController);
 }
 
 bool GameLayer::init()
 {
-
-
 	//////////////////////////////
 	// 1. super init first
 	if (!Layer::init())
 	{
 		return false;
 	}
-
+	CC_SAFE_RELEASE_NULL(_pPlayer);
 	this->_pPlayer = Player::create();
 	CC_SAFE_RETAIN(_pPlayer);
 
@@ -41,12 +29,7 @@ bool GameLayer::init()
 
 	_pPlayer->getCurSprite()->setPosition3D(Vec3(0, 0, -30));//这个位置可能需要换在其他地方去设定
 
-	CC_SAFE_RELEASE(_pGameMainController);
-	_pGameMainController = GameMainController::create(_pPlayer, this);
-	CC_SAFE_RETAIN(_pGameMainController);
-
 	scheduleUpdate();
-
 	return true;
 }
 
@@ -55,59 +38,15 @@ void GameLayer::update(float delta)
 
 }
 
-void GameLayer::onEnter()
+
+Player * GameLayer::getPlayer(void)
 {
-	
-	if (_pTouchListenerOneByOne != nullptr)
-	{
-		this->getEventDispatcher()->removeEventListener(_pTouchListenerOneByOne);
-		CC_SAFE_RELEASE_NULL(_pTouchListenerOneByOne);
-	}
-
-	_pTouchListenerOneByOne = EventListenerTouchOneByOne::create();
-	CC_SAFE_RETAIN(_pTouchListenerOneByOne);
-
-	_pTouchListenerOneByOne->setSwallowTouches(true);
-
-	_pTouchListenerOneByOne->onTouchBegan = CC_CALLBACK_2(GameLayer::onTouchBegan, this);
-	_pTouchListenerOneByOne->onTouchEnded = std::bind(&GameLayer::onTouchEnded, this, std::placeholders::_1, std::placeholders::_2);//实际使用当然是cocos封装的接口方便，但是要熟悉C++11就必须多使用
-
-	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_pTouchListenerOneByOne, this);
-
-
-	CCLayer::onEnter();
-
+	return _pPlayer;
 }
 
-void GameLayer::onExit()
+void GameLayer::setPlayer(Player * pPlayer)
 {
-	if (_pTouchListenerOneByOne != nullptr)
-	{
-		this->getEventDispatcher()->removeEventListener(_pTouchListenerOneByOne);
-		CC_SAFE_RELEASE_NULL(_pTouchListenerOneByOne);
-	}
-
-	CCLayer::onExit();
-}
-
-bool GameLayer::onTouchBegan(Touch *touch, Event *unused_event)
-{
-	_pGameMainController->onTouchBegan(touch, unused_event);
-	return true;
-}
-
-void GameLayer::onTouchEnded(Touch *touch, Event *unused_event)
-{
-	_pGameMainController->onTouchEnded(touch, unused_event);
-}
-
-void GameLayer::stopGame(void)
-{
-	if (_pTouchListenerOneByOne != nullptr)
-	{
-		this->getEventDispatcher()->removeEventListener(_pTouchListenerOneByOne);
-		CC_SAFE_RELEASE_NULL(_pTouchListenerOneByOne);
-	}
-
-	_pGameMainController->stopGame();
+	CC_SAFE_RETAIN(pPlayer);
+	CC_SAFE_RELEASE_NULL(_pPlayer);
+	this->_pPlayer = pPlayer;
 }

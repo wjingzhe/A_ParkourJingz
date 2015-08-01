@@ -13,22 +13,17 @@ public:
 
 	bool init(void);
 
-	bool onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * event);
-	void onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * event);
-
-	virtual void onEnter() override;
-	virtual void onExit() override;
-
 	void update(float delta) override;
 
 	CREATE_FUNC(GameLayer);
 
 	CC_DISALLOW_COPY_AND_ASSIGN(GameLayer);
 
-	void stopGame(void);
+	Player * getPlayer(void);
+
+	void setPlayer(Player * pPlayer);
 
 private:
-	cocos2d::EventListenerTouchOneByOne * _pTouchListenerOneByOne;
 	Player * _pPlayer;
-	GameMainController * _pGameMainController;
+	
 };
