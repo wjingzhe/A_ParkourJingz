@@ -14,9 +14,8 @@ public:
 	
 	bool init();
 
-	void reveiveTouchBegin(cocos2d::Vec2 pos, cocos2d::Node * pRenderNode);
-
-	void reveiveTouchEnd(cocos2d::Vec2 pos, cocos2d::Node * pRenderNode);
+	bool onTouchBegan(cocos2d::Touch * touch, cocos2d::Event * event);
+	void onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * event);
 
 	void beganMovePlayer(void);
 
@@ -26,10 +25,13 @@ public:
 
 	void stopGame(void);
 
+	void startGame(void);
+
 private:
 	CC_DISALLOW_COPY_AND_ASSIGN(PlayerController);
 
 private:
+	cocos2d::EventListenerTouchOneByOne * _pTouchListenerOneByOne;
 	Player * _pPlayer;
 	cocos2d::Vec2 _touchBeginPos;
 	cocos2d::Vec2 _touchEndPos;
