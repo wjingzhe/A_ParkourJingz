@@ -30,6 +30,9 @@ public:
 	// !!!! take care,if caused a out_of_range exception
 	MoveAbleElem * GenerateOneElem(unsigned int iTypeId) throw (std::out_of_range);
 
+	// !!!! take care,if caused a out_of_range exception
+	void tryToPreGenElem(unsigned int iTypeId) throw (std::out_of_range);
+
 	void registerElemAndFactory(unsigned int iTypeId, FactoryCreateFunc createFunc);
 
 	MoveAbleElemBaseFactory* getElemFactory(unsigned int iTypeId);

@@ -87,11 +87,53 @@ MoveAbleElem * MoveAbleElemManager::GenerateOneElem(unsigned int iTypeId) throw 
 		}
 		catch (std::out_of_range e)
 		{
-			CCLOG("You should call registerSelf(void) in you new MoveAbleElem's init function", iTypeId);
+			CCLOG("FUNC:GenerateOneElem:%ud failed! You should call registerSelf(void) in you new MoveAbleElem's init function", iTypeId);
 			throw e;
 		}
 	}
 
+}
+
+void MoveAbleElemManager::tryToPreGenElem(unsigned int iTypeId) throw (std::out_of_range)
+{
+	try
+	{
+
+		if (_mElemFactories.at(iTypeId) == nullptr)
+		{
+			try
+			{
+				auto pFactory = _mFactoryCreatFunc.at(iTypeId)();
+				_mElemFactories.insert(iTypeId, pFactory);
+				return pFactory->tryToPreGenElem();
+			}
+			catch (std::out_of_range e)
+			{
+				CCLOG("MoveAbleElem Type:%ud 's factory creatFunc is null", iTypeId);
+				throw e;
+			}
+
+		}
+		else
+		{
+			_mElemFactories.at(iTypeId)->tryToPreGenElem();
+		}
+
+	}
+	catch (std::out_of_range &e)
+	{
+		try
+		{
+			auto pFactory = _mFactoryCreatFunc.at(iTypeId)();
+			_mElemFactories.insert(iTypeId, pFactory);
+			_mElemFactories.at(iTypeId)->tryToPreGenElem();
+		}
+		catch (std::out_of_range &e)
+		{
+			CCLOG("FUNC:tryToPreGenElem:%ud failed! You should call registerSelf(void) in you new MoveAbleElem's init function", iTypeId);
+			throw e;
+		}
+	}
 }
 
 void MoveAbleElemManager::registerElemAndFactory(unsigned int iTypeId, FactoryCreateFunc createFunc)
