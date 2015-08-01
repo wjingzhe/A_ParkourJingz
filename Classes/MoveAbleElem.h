@@ -20,7 +20,7 @@ class MoveAbleElem :public cocos2d::Ref
 {
 protected:
 	MoveAbleElem() :_pSprite(nullptr), _vMoveDir(0, 0, 1), _fMoveSpeed(1.0f*60.0f)
-		, _iElemTypeId(0), _bIsSpriteInit(false)
+		, _iElemTypeId(0), _bIsSpriteInit(false), _pAction(nullptr)
 	{
 		
 	}
@@ -31,6 +31,7 @@ public:
 	{
 		cocos2d::Director::getInstance()->getScheduler()->unscheduleUpdate(this);
 		CC_SAFE_RELEASE_NULL(_pSprite);
+		CC_SAFE_RELEASE_NULL(_pAction);
 	}
 
 	virtual cocos2d::Sprite3D * getCurSprite(void)
@@ -75,7 +76,8 @@ public:
 
 	virtual void recycleSelf(void)
 	{
-		_pSprite->removeFromParent();
+		_pSprite->pause();
+		_pSprite->removeFromParentAndCleanup(false);
 		cocos2d::Director::getInstance()->getScheduler()->unscheduleUpdate(this);
 	}
 
@@ -87,19 +89,18 @@ public:
 			initSprite();;
 		}
 		cocos2d::Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
+		_pSprite->resume();
 	}
-
-	//!!!! You must call this function when you init your new MoveAbleElem
-	/*static void registerSelf(void)
-	{
-		MoveAbleElemManager::getInstance()->registerElemAndFactory(0, MoveAbleElemFactory<MoveAbleElem>::create);
-	}*/
 	
 	virtual void initSprite()
 	{
 		CC_SAFE_RELEASE_NULL(_pSprite);
 		_pSprite = cocos2d::Sprite3D::create();
 		CC_SAFE_RETAIN(_pSprite);
+		if (_pAction!=nullptr)
+		{
+			_pSprite->runAction(_pAction);
+		}
 	}
 
 
@@ -125,4 +126,5 @@ protected:
 	cocos2d::Vec3 _vMoveDir;
 	bool _bIsSpriteInit;
 	unsigned int _iElemTypeId;
+	cocos2d::Action * _pAction;
 };
