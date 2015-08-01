@@ -163,7 +163,11 @@ void MapSceneController::stopGame(void)
 	if (_pEventListenerAfterUpdate)
 	{
 		Director::getInstance()->getEventDispatcher()->removeEventListener(_pEventListenerAfterUpdate);
-		CC_SAFE_RELEASE_NULL(_pEventListenerAfterUpdate);
 	}
 	Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+}
+
+void MapSceneController::startGame(void)
+{
+	Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
 }

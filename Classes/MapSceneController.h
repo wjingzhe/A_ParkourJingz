@@ -45,6 +45,8 @@ public:
 
 	void stopGame(void);
 
+	void startGame(void);
+
 private:
 	Player * _pPlayer;
 	cocos2d::Layer * _pGameLayer;
