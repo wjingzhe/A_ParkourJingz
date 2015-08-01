@@ -7,6 +7,7 @@
 
 class MainMenuLayer:public cocos2d::Layer
 {
+	friend class GameMainController;
 	MainMenuLayer();
 public:
 	~MainMenuLayer();
@@ -31,7 +32,7 @@ protected:
 
 	void ChangeGold(cocos2d::EventCustom * pEvent);
 
-	void showRestart(cocos2d::EventCustom * pEvent);
+	void showRestart();
 
 private:
 	cocos2d::ui::TextAtlas * _pGoldText;
@@ -39,6 +40,7 @@ private:
 	cocos2d::ui::Widget* _pPauseAndGold;
 	cocos2d::ui::Button * _pPauseButton;
 	cocos2d::ui::ImageView * _pGoldImage;
+	cocos2d::EventListenerCustom * _pGoldChanged;
 	static long s_iCurrentGold;
 };
 

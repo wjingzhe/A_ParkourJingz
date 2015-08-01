@@ -12,7 +12,7 @@ USING_NS_CC;
 
 long MainMenuLayer::s_iCurrentGold = 0;
 
-MainMenuLayer::MainMenuLayer() :_pRestartButton(nullptr), _pGoldText(nullptr), _pPauseAndGold(nullptr), _pGoldImage(nullptr), _pPauseButton(nullptr)
+MainMenuLayer::MainMenuLayer() :_pRestartButton(nullptr), _pGoldText(nullptr), _pPauseAndGold(nullptr), _pGoldImage(nullptr), _pPauseButton(nullptr), _pGoldChanged(nullptr)
 {
 }
 
@@ -23,6 +23,11 @@ MainMenuLayer::~MainMenuLayer()
 	CC_SAFE_RELEASE_NULL(_pPauseAndGold);
 	CC_SAFE_RELEASE_NULL(_pGoldImage);
 	CC_SAFE_RELEASE_NULL(_pPauseButton);
+	if (_pGoldChanged != nullptr)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pGoldChanged);
+		CC_SAFE_RELEASE_NULL(_pGoldChanged);
+	}
 }
 
 bool MainMenuLayer::init()
@@ -104,19 +109,16 @@ bool MainMenuLayer::init()
 
 	//this->scheduleUpdate();
 
-	auto pGoldChanged = EventListenerCustom::create(RegitsteredEvents::GOLD_CHANGED, CC_CALLBACK_1(MainMenuLayer::ChangeGold, this));
-	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(pGoldChanged, this);
-
-	auto pRestart = EventListenerCustom::create(RegitsteredEvents::SHOW_RESTART, CC_CALLBACK_1(MainMenuLayer::showRestart, this));
-	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(pRestart, this);
+	_pGoldChanged = EventListenerCustom::create(RegitsteredEvents::GOLD_CHANGED, CC_CALLBACK_1(MainMenuLayer::ChangeGold, this));
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_pGoldChanged, this);
+	CC_SAFE_RETAIN(_pGoldChanged);
 
 	_pRestartButton = cocostudio::GUIReader::getInstance()->widgetFromJsonFile("Menu/Menu.json");
 	this->addChild(_pRestartButton, 10);
 	auto restart_btn = dynamic_cast<cocos2d::ui::Button *>(_pRestartButton->getChildByName("restart"));
 	restart_btn->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type) {
 		if (type == cocos2d::ui::Widget::TouchEventType::ENDED) {
-			static_cast<GameLayer *>(Director::getInstance()->getRunningScene()->getChildByName("Game_Main"))->stopGame();
-			Director::getInstance()->replaceScene(MainScene::create());
+			Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RegitsteredEvents::GAME_RESTART);
 		}
 	});
 
@@ -142,15 +144,17 @@ void MainMenuLayer::update(float delta)
 
 }
 
-void MainMenuLayer::showRestart(cocos2d::EventCustom * pEvent)
+void MainMenuLayer::showRestart()
 {
-	static_cast<GameLayer *>(Director::getInstance()->getRunningScene()->getChildByName("Game_Main"))->stopGame();
-	//Director::getInstance()->getRunningScene()->stopAllActions();
-	//cocos2d::Director::getInstance()->stopAnimation();
+	if (_pGoldChanged != nullptr)
+	{
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_pGoldChanged);
+		CC_SAFE_RELEASE_NULL(_pGoldChanged);
+	}
 	s_iCurrentGold = 0;
 	_pPauseButton->setVisible(false);
 	_pRestartButton->setVisible(true);
-	
+	Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(RegitsteredEvents::GAME_OVER);
 }
 
 void MainMenuLayer::ChangeGold(cocos2d::EventCustom * pEvent)
