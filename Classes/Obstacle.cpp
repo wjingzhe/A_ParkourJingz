@@ -25,6 +25,12 @@ bool Obstacle::init(const std::string &szModelPath, const std::string &szTexture
 
 	this->setMoveSpeed(1.0f*60.0f);
 
+	CC_SAFE_RELEASE_NULL(_pAction);
+	//动作为绕y轴旋转90度
+	_pAction = RepeatForever::create(MoveBy::create(2.0f, this->getMoveSpeed() * 2.0f * this->getMoveDirNormal()));
+	CC_SAFE_RETAIN(_pAction);
+	_pSprite->runAction(_pAction);
+
 	_bIsSpriteInit = true;
 
 	return true;
@@ -32,8 +38,6 @@ bool Obstacle::init(const std::string &szModelPath, const std::string &szTexture
 
 void Obstacle::update(float dt)
 {
-	auto moveStep = this->getMoveSpeed() * dt * this->getMoveDirNormal();
-	_pSprite->setPosition3D(_pSprite->getPosition3D() + moveStep);
 }
 
 void Obstacle::beHitted(MoveAbleElem * pMoveAbleElem)
