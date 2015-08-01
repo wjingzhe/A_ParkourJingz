@@ -35,6 +35,7 @@
 #define PRE_CREATE_INCREASEMENT 15
 #define PRE_CREATE_BASE 30
 #define ELEM_MIN_REMAIN 15
+#define ELEM_MAX_REMAIN 60
 
 #ifdef STD_VECTOR_ELEM
 #define pushBack push_back
@@ -138,7 +139,7 @@ public:
 		}
 	}
 
-	virtual T_Ptr getMoveAbleElem()
+	T_Ptr getMoveAbleElem()
 	{
 		if (_bPreCreateFinshed)
 		{
@@ -172,7 +173,27 @@ public:
 		return pElem;
 	}
 
-	virtual void recycleElem(MoveAbleElem * pElem)
+	void tryToPreGenElem()
+	{
+		if (_bPreCreateFinshed)
+		{
+			while (!_mutexLock.try_lock())
+			{
+			}
+			if (_pPreGenElem.size() <= ELEM_MAX_REMAIN)
+			{
+				_bPreCreateFinshed = false;
+			}
+			for (auto it = _pPreGenElem.begin(); it != _pPreGenElem.end(); ++it)
+			{
+				_vReadyElem.pushBack(*it);
+			}
+			_pPreGenElem.clear();
+			_mutexLock.unlock();
+		}
+	}
+
+	void recycleElem(MoveAbleElem * pElem)
 	{
 		_vReadyElem.pushBack(pElem);
 		for (auto it = _vUsedElem.begin(); it != _vUsedElem.end(); ++it)

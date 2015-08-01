@@ -47,6 +47,10 @@ public:
 		return nullptr;
 	}
 
+	virtual void tryToPreGenElem()
+	{
+	}
+
 	virtual void recycleElem(MoveAbleElem * pElem)
 	{
 	}
