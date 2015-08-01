@@ -125,11 +125,11 @@ void PlayerController::reveiveTouchEnd(Vec2 pos, Node * pRenderNode)
 
 		if (diff.y > 0)
 		{
-			MOVE_FORWARD(-5);
+			//MOVE_FORWARD(-5);
 		}
 		else
 		{
-			MOVE_FORWARD(5);
+			//MOVE_FORWARD(5);
 		}
 	}
 }
