@@ -21,10 +21,17 @@ bool Coin::init(const std::string &pathName)
 	CC_SAFE_RELEASE_NULL(_pSprite);
 
 	this->_pSprite = Sprite3D::create(pathName);
-	this->_pSprite->setRotation3D(Vec3(-90, 0, 90));
+	//绕x轴旋转-90度为初始精灵朝向
+	this->_pSprite->setRotation3D(Vec3(-90, 0, 0));
 	this->_pSprite->setScale(0.3f);
-
 	CC_SAFE_RETAIN(_pSprite);
+
+	
+	CC_SAFE_RELEASE_NULL(_pAction);
+	//动作为绕y轴旋转90度
+	_pAction = RepeatForever::create(RotateBy::create(1.0f, Vec3(0, 270, 0)));
+	CC_SAFE_RETAIN(_pAction);
+	_pSprite->runAction(_pAction);
 
 	this->setMoveSpeed(0.0f);
 	_bIsSpriteInit = true;
