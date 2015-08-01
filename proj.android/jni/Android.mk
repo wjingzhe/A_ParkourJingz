@@ -22,13 +22,11 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 				   ../../Classes/MapSceneController.cpp \
 				   ../../Classes/MapSequences.cpp \
 				   ../../Classes/MoveAbleElemManager.cpp \
-				   ../../Classes/MoveableElems.cpp \
 				   ../../Classes/NpcController.cpp \
 				   ../../Classes/Obstacle.cpp \
 				   ../../Classes/Player.cpp \
 				   ../../Classes/PlayerController.cpp \
 				   ../../Classes/RegitsteredEvents.cpp \
-				   ../../Classes/RuningController.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../
