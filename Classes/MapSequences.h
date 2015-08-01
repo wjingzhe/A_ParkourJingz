@@ -1,18 +1,27 @@
 #pragma once
 
 #include <vector>
+#include <string>
+
+enum OPER_ID
+{
+	NOW_GEN = 0,
+	PRE_GEN,
+};
 
 struct SequenceInfo
 {
 	unsigned int left;
 	unsigned int middle;
 	unsigned int right;
+	unsigned int oper;
 
-	SequenceInfo(unsigned int left, unsigned int middle, unsigned int right)
+	SequenceInfo(unsigned int left, unsigned int middle, unsigned int right, unsigned int oper = OPER_ID::NOW_GEN)
 	{
 		this->left = left;
 		this->middle = middle;
 		this->right = right;
+		this->oper = oper;
 	}
 };
 
@@ -36,7 +45,7 @@ public:
 	}
 
 protected:
-	void addSequences(unsigned int l, unsigned int m, unsigned int r);
+	void addSequences(unsigned int l, unsigned int m, unsigned int r, unsigned int oper = OPER_ID::NOW_GEN);
 
 private:
 	unsigned int _iCurIndex;

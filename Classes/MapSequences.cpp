@@ -65,7 +65,8 @@ MapSequences::MapSequences() :_iCurIndex(0)
 	addSequences(0, COIN_TYPE_ID, 0);
 	addSequences(OBSTACLE__ID, OBSTACLE__ID, 0);
 	addSequences(0, 0, 0);
-	addSequences(0, 0, 0);
+	addSequences(COIN_TYPE_ID, OBSTACLE__ID, OBSTACLE__ID, OPER_ID::PRE_GEN);
+	addSequences(COIN_TYPE_ID, OBSTACLE__ID, OBSTACLE__ID, OPER_ID::PRE_GEN);
 	addSequences(0, OBSTACLE__ID, 0);
 	addSequences(0, 0, 0);
 	addSequences(0, 0, 0);
@@ -170,8 +171,9 @@ MapSequences::MapSequences(const char * fileName) :_iCurIndex(0)
 		auto left = sequence->FirstChildElement("Left");
 		auto middle = sequence->FirstChildElement("Middle");
 		auto right = sequence->FirstChildElement("Right");
+		auto oper = sequence->FirstChildElement("Oper");
 
-		addSequences(atoi(left->GetText()), atoi(middle->GetText()), atoi(right->GetText()));
+		addSequences(atoi(left->GetText()), atoi(middle->GetText()), atoi(right->GetText()), atoi(oper->GetText()));
 		sequence = sequence->NextSiblingElement();
 	}
 }
@@ -180,9 +182,9 @@ MapSequences::~MapSequences()
 {
 }
 
-void MapSequences::addSequences(unsigned int l, unsigned int m, unsigned int r)
+void MapSequences::addSequences(unsigned int l, unsigned int m, unsigned int r, unsigned int oper)
 {
-	_vSequences.push_back(std::move(SequenceInfo(l, m, r)));
+	_vSequences.push_back(std::move(SequenceInfo(l, m, r, oper)));
 }
 
 SequenceInfo MapSequences::pumpSequence()

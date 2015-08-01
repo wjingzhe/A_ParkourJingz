@@ -199,9 +199,19 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 		break;\
 	}
 
-	GEN_ELEMENTS(seq.left, POS_LEFT);
-	GEN_ELEMENTS(seq.middle, POS_MIDDLE);
-	GEN_ELEMENTS(seq.right, POS_RIGHT);
+	if (seq.oper == OPER_ID::NOW_GEN)
+	{
+		GEN_ELEMENTS(seq.left, POS_LEFT);
+		GEN_ELEMENTS(seq.middle, POS_MIDDLE);
+		GEN_ELEMENTS(seq.right, POS_RIGHT);
+	}
+	else if (seq.oper == OPER_ID::PRE_GEN)
+	{
+		MoveAbleElemManager::getInstance()->tryToPreGenElem(seq.left);
+		MoveAbleElemManager::getInstance()->tryToPreGenElem(seq.middle);
+		MoveAbleElemManager::getInstance()->tryToPreGenElem(seq.right);
+	}
+	
 }
 
 cocos2d::Vec3 && NpcController::calcuratePosWillHit(MoveAbleElem * pElemSrc, Player * pElemTar, float fDtToHit)
