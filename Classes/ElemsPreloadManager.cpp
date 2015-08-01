@@ -29,7 +29,7 @@ void ElemsPreloadManager::registerMoveAbleElemTypes(void)
 	s_bRegisterd = true;
 }
 
-void ElemsPreloadManager::preCreateMoveAbleElems(void)
+void ElemsPreloadManager::forceCreateMoveAbleElems(void)
 {
 	if (!s_bRegisterd)
 	{

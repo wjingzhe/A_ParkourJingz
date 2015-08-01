@@ -10,7 +10,7 @@ public:
 
 	static void registerMoveAbleElemTypes(void);
 
-	static void preCreateMoveAbleElems(void);
+	static void forceCreateMoveAbleElems(void);
 
 private:
 	static bool s_bRegisterd;
