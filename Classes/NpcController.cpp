@@ -251,6 +251,7 @@ void NpcController::stopGame(void)
 	{
 		auto pMoveAbleElem = *it;
 		cocos2d::Director::getInstance()->getScheduler()->unscheduleUpdate(pMoveAbleElem);
+		pMoveAbleElem->getCurSprite()->pause();
 	}
 	
 }
