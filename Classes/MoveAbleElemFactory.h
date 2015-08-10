@@ -31,11 +31,13 @@
 
 #include "MoveAbleElem.h"
 
-#define INCREASEMENT 3
-#define PRE_CREATE_INCREASEMENT 15
+#define INCREASEMENT 40
+#define PRE_CREATE_INCREASEMENT_TIMES 1
 #define PRE_CREATE_BASE 30
 #define ELEM_MIN_REMAIN 15
-#define ELEM_MAX_REMAIN 60
+#define ELEM_MAX_REMAIN 80
+//应该根据配置去读取实际可能最多数量
+#define ELEM_MAX_NEED 100
 
 #ifdef STD_VECTOR_ELEM
 #define pushBack push_back
@@ -61,15 +63,17 @@ class MoveAbleElemFactory :public MoveAbleElemBaseFactory
 {
 	typedef T* T_Ptr;
 protected:
-	MoveAbleElemFactory() :_bPreCreateFinshed(false), _bThreedNeedToExit(false)
+	MoveAbleElemFactory() :_bPreCreateFinshed(false), _bThreedNeedToExit(false), _iCount(0)
 	{
 		auto & _locked = _mutexLock;
 		auto & _pPreGenElem = this->_pPreGenElem;
 		auto & _bPreCreateFinshed = this->_bPreCreateFinshed;
 		auto & _bThreedNeedToExit = this->_bThreedNeedToExit;
+		auto & curStep = this->_iCount;
+		auto totalStep = PRE_CREATE_INCREASEMENT_TIMES; //todo
 		//新起线程去完成加载，用锁来控制唯一性
 		_theadPreload = std::thread(
-			[&_locked, &_pPreGenElem, &_bPreCreateFinshed, &_bThreedNeedToExit]()->void
+			[&_locked, &_pPreGenElem, &_bPreCreateFinshed, &_bThreedNeedToExit, &curStep,&totalStep]()->void
 		{
 			while (true)
 			{
@@ -84,11 +88,17 @@ protected:
 						//尝试取锁
 						std::this_thread::sleep_for(std::chrono::milliseconds(200));
 					}
-					ADD_MOVEABLE_ELEM(_pPreGenElem, PRE_CREATE_BASE);
-					_bPreCreateFinshed = true;
-					_locked.unlock();
+					ADD_MOVEABLE_ELEM(_pPreGenElem, INCREASEMENT);//切换线程的时间和创建INCREASEMENT对象的计算量最好得相近
+					++curStep;
+					if (curStep >= totalStep)
+					{
+						_bPreCreateFinshed = true;
+						curStep = 0;
+					}
 					//解锁
+					_locked.unlock();
 					std::this_thread::yield();
+					
 				}
 
 				if (_bThreedNeedToExit)
@@ -141,28 +151,43 @@ public:
 
 	T_Ptr getMoveAbleElem()
 	{
-		if (_bPreCreateFinshed)
+		if (_vReadyElem.size() <= ELEM_MIN_REMAIN && _bPreCreateFinshed)
 		{
-			while (!_mutexLock.try_lock())
-			{
-			}
-			if (_vReadyElem.size() <= ELEM_MIN_REMAIN)
+			_mutexLock.lock();
+			if (_vReadyElem.size() <= ELEM_MAX_REMAIN)
 			{
 				_bPreCreateFinshed = false;
 			}
-			
 			for (auto it = _pPreGenElem.begin(); it != _pPreGenElem.end(); ++it)
 			{
 				_vReadyElem.pushBack(*it);
 			}
 			_pPreGenElem.clear();
+			_iCount = 0;
 			_mutexLock.unlock();
 		}
 
 		if (_vReadyElem.empty())
-		{
-			ADD_MOVEABLE_ELEM(_vReadyElem, INCREASEMENT);
+		{		
+			ADD_MOVEABLE_ELEM(_vReadyElem, 1);
 		}
+		//已够用，销毁工厂线程
+		else if (_vReadyElem.size() >= ELEM_MAX_NEED)
+		{
+			int i = 0;
+			while (!_mutexLock.try_lock() && i < 5)
+			{
+				++i;
+				//尝试取锁
+				std::this_thread::sleep_for(std::chrono::milliseconds(200));
+			}
+			if (i < 5)
+			{
+				_bThreedNeedToExit.store(true);
+				_mutexLock.unlock();
+			}
+		}
+		
 
 		//todo 
 		T_Ptr pElem = dynamic_cast<T_Ptr >(_vReadyElem.back());//不用auto 是为了确认返回非const T *
@@ -173,24 +198,17 @@ public:
 		return pElem;
 	}
 
-	void tryToPreGenElem()
+	void forceToPreCreate()
 	{
-		if (_bPreCreateFinshed)
+		_mutexLock.lock();
+		for (auto it = _pPreGenElem.begin(); it != _pPreGenElem.end(); ++it)
 		{
-			while (!_mutexLock.try_lock())
-			{
-			}
-			if (_pPreGenElem.size() <= ELEM_MAX_REMAIN)
-			{
-				_bPreCreateFinshed = false;
-			}
-			for (auto it = _pPreGenElem.begin(); it != _pPreGenElem.end(); ++it)
-			{
-				_vReadyElem.pushBack(*it);
-			}
-			_pPreGenElem.clear();
-			_mutexLock.unlock();
+			_vReadyElem.pushBack(*it);
 		}
+		_pPreGenElem.clear();
+		_bPreCreateFinshed = false;
+		_iCount = 0;
+		_mutexLock.unlock();
 	}
 
 	void recycleElem(MoveAbleElem * pElem)
@@ -212,6 +230,7 @@ protected:
 	std::thread _theadPreload;
 	std::atomic<bool> _bPreCreateFinshed;
 	std::atomic<bool> _bThreedNeedToExit;
+	std::atomic<int> _iCount;
 	std::mutex _mutexLock;
 private:
 };
