@@ -19,7 +19,7 @@ bool Obstacle::init(const std::string &szModelPath, const std::string &szTexture
 	CC_SAFE_RELEASE_NULL(_pSprite);
 	_pSprite = Sprite3D::create(szModelPath, szTexturePath);
 	CC_SAFE_RETAIN(_pSprite);
-	_pSprite->setLocalZOrder(100);//£¿£¿ //todo 
+	//_pSprite->setLocalZOrder(100);//£¿£¿ //todo 
 	//_pSprite->setRotation3D(Vec3(-90, 0, 90));
 	_pSprite->setScale(0.1f);
 
