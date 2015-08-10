@@ -33,6 +33,26 @@ public:
 		}
 	}
 
+	static Coin* create()
+	{
+		Coin *pRet = new(std::nothrow) Coin();
+#ifdef STD_VECTOR_ELEM
+		if (pRet)
+#else
+		if (pRet && pRet->init())
+#endif
+		{
+			pRet->autorelease();
+			return pRet;
+		}
+		else
+		{
+			delete pRet;
+			pRet = NULL;
+			return NULL;
+		}
+	}
+
 	virtual void initSprite()
 	{
 		init();
