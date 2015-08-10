@@ -4,6 +4,20 @@
 
 class MoveAbleElemBaseFactory :public cocos2d::Ref
 {
+	friend class MoveAbleElemManager;
+
+protected:
+#ifdef STD_VECTOR_ELEM
+	std::vector<MoveAbleElem *> _vUsedElem;
+	std::vector<MoveAbleElem *> _vReadyElem;
+	std::vector<MoveAbleElem *> _pPreGenElem;
+#else
+	cocos2d::Vector<MoveAbleElem *> _vUsedElem;
+	cocos2d::Vector<MoveAbleElem *> _vReadyElem;
+	cocos2d::Vector<MoveAbleElem *> _pPreGenElem;
+
+#endif
+
 protected:
 	MoveAbleElemBaseFactory() { ; }
 public:
@@ -47,7 +61,7 @@ public:
 		return nullptr;
 	}
 
-	virtual void tryToPreGenElem()
+	virtual void forceToPreCreate()
 	{
 	}
 
@@ -55,19 +69,10 @@ public:
 	{
 	}
 
-
-protected:
-#ifdef STD_VECTOR_ELEM
-	std::vector<MoveAbleElem *> _vUsedElem;
-	std::vector<MoveAbleElem *> _vReadyElem;
-	std::vector<MoveAbleElem *> _pPreGenElem;
-#else
-	cocos2d::Vector<MoveAbleElem *> _vUsedElem;
-	cocos2d::Vector<MoveAbleElem *> _vReadyElem;
-	cocos2d::Vector<MoveAbleElem *> _pPreGenElem;
-	
-#endif
-	
+	int getReadyElemSize()
+	{
+		return _vReadyElem.size();
+	}
 
 private:
 	
