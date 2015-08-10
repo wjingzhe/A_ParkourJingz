@@ -65,8 +65,6 @@ MapSequences::MapSequences() :_iCurIndex(0)
 	addSequences(0, COIN_TYPE_ID, 0);
 	addSequences(OBSTACLE__ID, OBSTACLE__ID, 0);
 	addSequences(0, 0, 0);
-	addSequences(COIN_TYPE_ID, OBSTACLE__ID, OBSTACLE__ID, OPER_ID::PRE_GEN);
-	addSequences(COIN_TYPE_ID, OBSTACLE__ID, OBSTACLE__ID, OPER_ID::PRE_GEN);
 	addSequences(0, OBSTACLE__ID, 0);
 	addSequences(0, 0, 0);
 	addSequences(0, 0, 0);
