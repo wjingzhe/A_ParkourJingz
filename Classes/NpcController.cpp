@@ -67,11 +67,11 @@ bool NpcController::init(Player * pPlayer, cocos2d::Layer * pGameLayer)
 	this->insertMapSequence(new MapSequences());
 
 	//todo
-	auto temp1 = MoveAbleElemManager::getInstance()->GenerateOneElem(OBSTACLE__ID);
+	auto temp1 = MoveAbleElemManager::getInstance()->generateOneElem(OBSTACLE__ID);
 	_diffObstacleWithPlay = calcuratePosWillHit(temp1, pPlayer, _fRecationDt * 4);
 	MoveAbleElemManager::getInstance()->recycleElem(temp1);
 
-	auto temp2 = MoveAbleElemManager::getInstance()->GenerateOneElem(COIN_TYPE_ID);
+	auto temp2 = MoveAbleElemManager::getInstance()->generateOneElem(COIN_TYPE_ID);
 	_diffCoinWithPlay = calcuratePosWillHit(temp2, pPlayer, _fRecationDt * 4);
 	MoveAbleElemManager::getInstance()->recycleElem(temp2);
 
@@ -102,8 +102,8 @@ void NpcController::update(float delta)
 			
 			
 		}
-		//todo 300值在于我不知道如何获取模型的大小
-		else if ((*it)->getCurSprite()->getPositionZ() >= _pPlayer->getCurSprite()->getPositionZ() + 100)//非碰撞且远离玩家角色
+		//todo 50值在于我不知道如何获取模型的大小
+		else if ((*it)->getCurSprite()->getPositionZ() >= _pPlayer->getCurSprite()->getPositionZ() + 50.0f)//非碰撞且远离玩家角色
 		{
 			//回收
 			auto pMoveAbleElem = *it;
@@ -131,17 +131,12 @@ void NpcController::randomGenElement(Player * pPlayer, cocos2d::Node * pRenderNo
 
 	fObstacleStepTime += dt;
 
-	//每隔0.5秒生成一次障碍物,每次生成5行
+	//每隔0.5秒生成一次障碍物,每次生成1行
 	if (fObstacleStepTime > 0.5)
 	{
 		generateObstacle(pPlayer, pRenderNode, dt);
 		fObstacleStepTime = 0.0f;
 	}
-	//if (Director::getInstance()->getFrameRate() < 50.0f)
-	//{
-	//	auto a = 1;
-	//	return;
-	//}
 }
 
 SequenceInfo NpcController::pumpSequence()
@@ -172,9 +167,9 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 		\
 	case OBSTACLE__ID:\
 						{\
-			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(ELEM_ID);\
+			auto temp = MoveAbleElemManager::getInstance()->generateOneElem(ELEM_ID);\
 			vpMoveableElems.pushBack(temp);\
-			pRenderNode->addChild(temp->getCurSprite());\
+			pRenderNode->addChild(temp->getCurSprite(),100);\
 			if(false) \
 			{ \
 				temp->getCurSprite()->setPosition3D(pPlayer->getCurSprite()->getPosition3D() + _diffObstacleWithPlay );\
@@ -189,9 +184,9 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 	   \
 	case COIN_TYPE_ID:\
 		{\
-			auto temp = MoveAbleElemManager::getInstance()->GenerateOneElem(ELEM_ID); \
+			auto temp = MoveAbleElemManager::getInstance()->generateOneElem(ELEM_ID); \
 			vpMoveableElems.pushBack(temp);\
-			pRenderNode->addChild(temp->getCurSprite()); \
+			pRenderNode->addChild(temp->getCurSprite(),50); \
 			temp->getCurSprite()->setPosition3D( \
 					 Vec3(POS_X, 0 + _diffObstacleWithPlay.y, pPlayer->getCurSprite()->getPositionZ() + _diffObstacleWithPlay.z));  \
 			temp->getCurSprite()->setRotation3D(Vec3(90.0f, 0.0f, 180.0f));\
@@ -207,9 +202,19 @@ void NpcController::generateObstacle(Player * pPlayer, cocos2d::Node * pRenderNo
 	}
 	else if (seq.oper == OPER_ID::PRE_GEN)
 	{
-		MoveAbleElemManager::getInstance()->tryToPreGenElem(seq.left);
-		MoveAbleElemManager::getInstance()->tryToPreGenElem(seq.middle);
-		MoveAbleElemManager::getInstance()->tryToPreGenElem(seq.right);
+		//todo 70 应该有配置表项定义才对
+		if (MoveAbleElemManager::getInstance()->getElemFactory(seq.left)->getReadyElemSize() < 70)
+		{
+			MoveAbleElemManager::getInstance()->forceToPreCreate(seq.left);
+		}
+		if (MoveAbleElemManager::getInstance()->getElemFactory(seq.middle)->getReadyElemSize() < 70)
+		{
+			MoveAbleElemManager::getInstance()->forceToPreCreate(seq.middle);
+		}
+		if (MoveAbleElemManager::getInstance()->getElemFactory(seq.right)->getReadyElemSize() < 70)
+		{
+			MoveAbleElemManager::getInstance()->forceToPreCreate(seq.right);
+		}
 	}
 	
 }
@@ -238,7 +243,7 @@ cocos2d::Vec3 && NpcController::calcuratePosWillHit(MoveAbleElem * pElemSrc, Pla
 
 	tartDir *= fDtToHit;
 
-	//pSpriteSrc->setPosition3D(pSpriteTar->getPosition3D() + tartDir + Vec3(0,-5,0));
+	pSpriteSrc->setPosition3D(pSpriteTar->getPosition3D() + tartDir + Vec3(0,-5,0));
 
 	CC_SAFE_RELEASE(pElemTar);
 
