@@ -34,7 +34,7 @@
 #define INCREASEMENT 40
 #define PRE_CREATE_INCREASEMENT_TIMES 1
 #define PRE_CREATE_BASE 30
-#define ELEM_MIN_REMAIN 15
+#define ELEM_MIN_REMAIN 20
 #define ELEM_MAX_REMAIN 80
 //应该根据配置去读取实际可能最多数量
 #define ELEM_MAX_NEED 100
