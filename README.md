@@ -1,41 +1,41 @@
-1������ cocos 3.6 �޸���ĳЩcpp�ļ�
-2������cocos2d/download-deps.py �������
-3������vs2013���ɡ������������뷴����455786463@qq.com �� QȺ195660307 �Ҿ�������
-4��Android�汾����������У�NDK-r10������Ʒֱ���Ϊ960*640��960*540����ֱ���ƥ��������ΪBO_BORDER�����ԶԶ�����Ļ����
+1、基于 cocos 3.6 修改了某些cpp文件
+2、运行cocos2d/download-deps.py 完成配置
+3、运行vs2013即可。若遇到问题请反馈至455786463@qq.com 或 Q群195660307 找镜子蓝玉
+4、Android版本亦可正常运行（NDK-r10），设计分辨率为960*640或960*540，多分辨率匹配更新设计为BO_BORDER，可以对多种屏幕适配
 
-ֱ�����а���APK��: http://pan.baidu.com/s/1eQuCN0Q ����: bi2k
+直接运行包：APK包: http://pan.baidu.com/s/1eQuCN0Q 密码: bi2k
 
-�ҽ������ܣ�֧�����˺ţ�18520521747��˭��Ǯ�����һ������ң��ǵ����ԡ���Ҫ�ҵı���֧Ԯ�Ļ�Ҳ����
+我叫xxx，支付宝账号：xxxxx，谁有钱，借我或赞助我，记得留言。需要我的编码支援的话也留言
 
-�汾��¼��
+版本记录：
 v0.1.2:
-	1�������߳����Coin��Obstacle�ȶ���Ԥ����
-	2������ɻ�����Ծ��Ӧ����δ����»���ɫģ�Ͳ����������ǽ���ģ����չΪ����ģ�顣��MoveAbleElem������SkillStatus��Ӧ������ָ��
-	3�����޸ģ���controller��Ϊscene���ԣ�ȥ����Layer�Ͷ�Ӧ��model���ݣ��������չUI��أ����ڶ�Ӧ����Layer�������Ӳ�MVC�ṹ
-	4��GameMainController��Ӧ��Ϸ������¼�����������controller�ֱ�������Ϸ�߼�
-	5�����Ż����߳�֮ǰ�л��ͻ��������ʵ��µ������½�
+	1、独立线程完成Coin、Obstacle等对象预生成
+	2、已完成基本跳跃响应，暂未完成下滑角色模型操作，正考虑将此模块拓展为技能模块。在MoveAbleElem中增加SkillStatus相应的类型指针
+	3、大修改：将controller置为scene属性，去管理Layer和对应的model数据；如后期拓展UI相关，则在对应的主Layer层增加子层MVC结构
+	4、GameMainController响应游戏级别的事件处理，其他controller分别处理子游戏逻辑
+	5、已优化多线程之前切换和互斥锁访问导致的性能下降
 	
 v0.1.1:
-	1�����߳�Ԥ����Coin��Obstacle�ȶ���ֻҪ��ElemsPreloadManager��ע��Ԥ���ؼ��ɣ����Ƴ�֮ǰ��̬ע��Ĵ��룩�����С����Ԥ���ɿ��ٵ����⣺��diff����ֵ����ʹ�ã����ٸ����߼����ظ�����
-	2��Android�汾����������У���Ʒֱ���Ϊ960*640����ֱ���ƥ����ʱδSHOW_ALL����δ��16:9���м��ݣ����кڱߣ�
-	3������ɽӴ���⡢�Ӵ��߼���Ӧ��MoveAbleElem���գ�
-	4�����ƶ����ͱ�ǩ��������س����滻��ʹ��MoveAbleElemTypeDefines�ļ�
-	5���޸�API���������Լ�Android��API�����Դ���
+	1、多线程预生成Coin、Obstacle等对象（只要在ElemsPreloadManager中注册预加载即可，已移除之前静态注册的代码）；解决小部分预生成卡顿的问题：将diff计算值缓存使用，减少更新逻辑的重复工作
+	2、Android版本亦可正常运行，设计分辨率为960*640，多分辨率匹配暂时未SHOW_ALL，并未对16:9进行兼容（即有黑边）
+	3、已完成接触检测、接触逻辑响应、MoveAbleElem回收，
+	4、可移动类型标签管理和相关常量替换，使用MoveAbleElemTypeDefines文件
+	5、修复API调用问题以及Android版API兼容性代码
 
 
 v0.1.0:
-	1���������������ܵĴ��룺C++ʵ�ַ������
-	���ӹ������ɹ���ϵͳ��Ϊÿ���¿��ƶ���������ע����ƣ����ɾ�̬����ʵ�����ͺͣ�����+ģ�壩������������ʹ���˵��������ڴ�й¶��ʽ
-	2��3D������3Dģ�ͣ�ʵʱ�ƶ���ɫģ�ͺ͹���ģ�������Ϸ�߼�
-	3��C++11������ָ�롢Ŀ�ꡢ���󹤳�ģʽ��������ģʽ��������ƣ��ԣ�û������Ϊģ��λ�ü�����Щ��ͬ��û���������δ���Է�����ʽ��
+	1、彻底属于xxx的代码：C++实现放射机制
+	增加怪物生成管理系统，为每种新可移动怪物增加注册机制（生成静态对象实现类型和（抽象+模板）工厂方法），使用了单个对象内存泄露方式
+	2、3D场景，3D模型，实时移动角色模型和怪物模型完成游戏逻辑
+	3、C++11，函数指针、目标、抽象工厂模式、管理者模式、反射机制（对，没错。因为模型位置计算有些不同，没有完成整理未绝对放射形式）
 	
-�������ǣ�
-	1������ƿ������1���߳��л��Լ������ȴ� 2��ʹ��elemǰҪ����Sprite3D����Ŀǰδʵ��Ϊ���߳�֧�֣�3������Ⱦģʽ���߼�ģʽδ���ԣ�
-	2���������ļ�������Ԥ���������ʽ��AAAȫһ����Ԥ����һ��30������Ҳ�������������⣬ֻ���޸�Sprite3D���Ӷ��̷߳�ʽ����
-	3�����ϣ����Ҷ���ͬ��������Ҫ�������ʽ����Ϊ��ID��LEFT��NUM��OPER����δ���У�ÿ�ν����������
+遗留补记：
+	1、性能瓶颈在于1、线程切换以及获锁等待 2、使用elem前要生成Sprite3D，而目前未实现为多线程支持；3、纯渲染模式无逻辑模式未测试；
+	2、在配置文件中增加预生成命令格式：AAA全一样则预生成一次30个量，也解决不了这个问题，只能修改Sprite3D增加多线程方式创建
+	3、如果希望金币动作同步，则需要将命令格式更改为（ID，LEFT，NUM，OPER），未来中，每次解析三条命令。
 	
-	1�����������ǲ��Թؼ���ģ����Ⱦ���߼�������Ч�ʣ���������������ȷ��������ƿ��������˵��ϸ�����ģ���ų��������ж��̵߳��������ô���ԣ�Ŀǰֻ���ȰѶ��̸߳���Ϊȫ������elem���ٿ�ʼ�������ܲ��
-	2�����̵߳��л�����Ӧ�ñ�֤��ı��߳���ɵ�����ҪС��ͬʱ�ڶ�˻����϶��̼߳�����Դ�����Ʋ����ԣ�Ҫ��Ȼ�����׸��
-	3����������Ĵ�����Ӧ��ʹ��cocos��create������Ӧ���Լ�ά��һ���������ڴ棻Ҳ����˵����Ҫ��Ref�����ü������ʷ�ʽ���ų���������ʹ��release������ͬʱ���Ӹ��������Զ�Ӧ�ڴ�飬�ٴ�����ʱӦ�Ƚ�GameLayer������ģ������ü���������������Manager��pureInstance������������ָ��ɾ������
+	1、发现我忘记测试关键的模型渲染和逻辑处理的效率，导致现在难以正确把握性能瓶颈，还是说详细地逐个模块排除；可是有多线程的情况下怎么测试，目前只能先把多线程更改为全部加载elem后再开始测试性能差别
+	2、多线程的切换还少应该保证损耗比线程完成的内容要小；同时在多核机子上多线程加载资源的优势才明显，要不然变成累赘。
+	3、批量对象的创建不应该使用cocos的create方法，应该自己维护一个数组型内存；也就是说，我要将Ref的引用计数访问方式开放出来，不能使用release方法。同时增加个容器所以对应内存块，再次清理时应先将GameLayer等其他模块的引用计数清理，最后调用Manager的pureInstance操作，将数组指针删除掉。
 	
-	���Լ���GL calls�Ĵ����͸����ڴ��ʹ�����
+	尝试减低GL calls的次数和跟踪内存的使用情况
