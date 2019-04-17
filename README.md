@@ -1,5 +1,6 @@
-必要声明一下，这个代码原始作者https://github.com/tangziwen/ParkourTut
-当时我不懂怎么管理这些分支，这些代码源是盗版的
+必要声明一下，这位才是原始作者https://github.com/tangziwen/ParkourTut
+
+当时我的代码源是盗版的，改的
 
 
 1、基于 cocos 3.6 修改了某些cpp文件
